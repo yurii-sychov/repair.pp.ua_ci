@@ -236,3 +236,8 @@ if (exampleEl) {
 		var tooltip = new bootstrap.Tooltip(exampleEl[i]);
 	}
 }
+
+lightbox.option({
+	wrapAround: true,
+	albumLabel: "Зображення %1 з %2",
+});

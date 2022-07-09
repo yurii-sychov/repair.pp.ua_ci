@@ -35,6 +35,7 @@ class Photo_Model extends CI_Model
 		$this->db->select('photo_albums.id as photo_album_id, photo_albums.photo_album_date, photo_albums.photo_album_name, photos.*');
 		$this->db->where('photos.photo_album_id = photo_albums.id');
 		$this->db->where('passport_id', $passport_id);
+		$this->db->order_by('photo_album_date', 'ASC');
 		$query = $this->db->get('photos, photo_albums');
 		return $query->result();
 	}

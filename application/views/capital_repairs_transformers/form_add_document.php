@@ -22,7 +22,7 @@
 	<div class="row">
 		<div class="col-md-12 mb-3">
 			<label for="documentScan" class="form-label">Скан документу</label>
-			<input type="file" name="document_scan" class="form-control" id="documentScan">
+			<input type="file" name="document_scan" class="form-control" id="documentScan" accept=".pdf">
 			<div class="invalid-feedback"></div>
 		</div>
 	</div>

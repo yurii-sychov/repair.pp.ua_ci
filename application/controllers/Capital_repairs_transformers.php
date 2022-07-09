@@ -46,24 +46,20 @@ class Capital_repairs_transformers extends CI_Controller
 		$passports = $this->passport_model->get_capital_repairs_of_transformers();
 
 
-		foreach ($passports as $key => $passport) {
-			$passport->documents = [];
-			$passport->documents = $this->document_model->get_documents_for_passport($passport->id);
+		foreach ($passports as $passport) {
 
-			$photo_albums = $this->photo_model->get_photos_for_passport($passport->id);
+			$passport->documents = $this->document_model->get_documents_for_passport($passport->id);
+			$photos = $this->photo_model->get_photos_for_passport($passport->id);
 
 			$passport->photo_albums = [];
 			$passport->photos = [];
-			foreach ($photo_albums as $item) {
-				// echo $passport->id . '==' . $item->passport_id;
-				// echo "<br>";
 
-				$group_photo_albums[$item->photo_album_name][] = [
-					'id' => $item->photo_album_id,
-					'photo_album_date' => $item->photo_album_date,
-					'photo_album_name' => $item->photo_album_name,
-				];
-				$passport->photo_albums = $group_photo_albums;
+			foreach ($photos as $item) {
+				if ($passport->id == $item->passport_id) {
+					$passport->photo_albums[$item->photo_album_name]['id'] = $item->photo_album_id;
+					$passport->photo_albums[$item->photo_album_name]['photo_album_date'] = $item->photo_album_date;
+					$passport->photo_albums[$item->photo_album_name]['photo_album_name'] = $item->photo_album_name;
+				}
 
 				$group_photos[$item->photo_album_name][] = [
 					'id ' => $item->id,
@@ -76,7 +72,7 @@ class Capital_repairs_transformers extends CI_Controller
 
 		$data['passports'] = $passports;
 		// echo "<pre>";
-		// print_r($passports[0]);
+		// print_r($passports);
 		// echo "</pre>";
 		$this->load->view('layout', $data);
 	}
@@ -130,6 +126,7 @@ class Capital_repairs_transformers extends CI_Controller
 		}
 
 		$this->load->library('form_validation');
+		// $this->load->library('image_lib');
 
 		$this->form_validation->set_rules('photo_album_date', 'Дата створення альбому', 'required');
 		$this->form_validation->set_rules('photo_album_name', 'Назва альбому', 'required|min_length[3]|max_length[49]');
@@ -162,9 +159,60 @@ class Capital_repairs_transformers extends CI_Controller
 				}
 			}
 
+			$this->resize_photo($upload['success']);
+
+			// $this->watermark_photo($upload['success']);
+
 			$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Файли успішно завантажено.'], JSON_UNESCAPED_UNICODE));
 			return;
 		}
+	}
+
+	private function resize_photo($photos)
+	{
+		$this->load->library('image_lib');
+
+		if (!file_exists('./assets/photos/thumb')) {
+			mkdir('./assets/photos/thumb', 0755);
+		}
+
+		foreach ($photos as $photo) {
+			$config['image_library'] = 'gd2';
+			$config['source_image'] = './assets/photos/' . $photo;
+			$config['new_image'] = './assets/photos/thumb/';
+			// $config['create_thumb'] = TRUE;
+			$config['maintain_ratio'] = TRUE;
+			$config['width'] = 100;
+
+			$this->image_lib->initialize($config);
+
+			if (!$this->image_lib->resize()) {
+				echo $this->image_lib->display_errors();
+			}
+		}
+	}
+
+	private function watermark_photo($photos)
+	{
+		$this->load->library('image_lib');
+
+		foreach ($photos as $photo) {
+			$config['source_image'] = './assets/photos/' . $photo;
+			$config['wm_text'] = 'Copyright 2022 - Yurii Sychov';
+			$config['wm_type'] = 'text';
+			$config['wm_font_path'] = './system/fonts/texb.ttf';
+			$config['wm_font_size'] = '24';
+			$config['wm_font_color'] = 'ffffff';
+			$config['wm_vrt_alignment'] = 'middle';
+			$config['wm_hor_alignment'] = 'center';
+
+			$this->image_lib->initialize($config);
+
+			if (!$this->image_lib->watermark()) {
+				echo $this->image_lib->display_errors();
+			}
+		}
+		exit;
 	}
 
 	public function delete_document($id = NULL)

@@ -45,9 +45,10 @@
 										</tr>
 									</thead>
 									<tbody>
+										<?php $y = 1; ?>
 										<?php foreach ($item->documents as $doc) : ?>
 											<tr data-id="<?php echo $doc->id; ?>">
-												<td class="text-center"><?php echo $doc->id; ?></td>
+												<td class="text-center"><?php echo $y; ?></td>
 												<td class="text-center"><?php echo date('d.m.Y', strtotime($doc->document_date)); ?></td>
 												<td><?php echo $doc->document_description; ?></td>
 												<td class="text-center">
@@ -55,6 +56,7 @@
 													<a href="javascript:void(0);" class="mx-1" onClick="deleteDocument(event);"><i class="bi bi-trash text-danger" title="Видалити документ" data-bs-toggle="tooltip"></i></a>
 												</td>
 											</tr>
+											<?php $y++; ?>
 										<?php endforeach; ?>
 									</tbody>
 								</table>
@@ -66,20 +68,25 @@
 											<th style="width: 10%;">№ з/п</th>
 											<th style="width: 15%;">Дата</th>
 											<th style="width: 65%;" class="text-start">Назва фотоальбому</th>
-											<th style="width: 10%;"><i class="bi bi-card-image"></i></th>
+											<th style="width: 10%;">Дія</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php foreach ($item->photo_albums as $album => $photos) : ?>
+										<?php $y = 1; ?>
+										<?php foreach ($item->photo_albums as $album_name => $album) : ?>
 											<tr>
-												<td class="text-center"><?php echo $photos[0]['id']; ?>
-												<td class="text-center"><?php echo date('d.m.Y', strtotime($photos[0]['photo_album_date'])); ?></td>
-												<td><?php echo $album; ?></td>
+												<td class="text-center"><?php echo $y; ?>
+												<td class="text-center"><?php echo date('d.m.Y', strtotime($album['photo_album_date'])); ?></td>
+												<td><?php echo $album['photo_album_name']; ?></td>
 												<td class="text-center">
-													<?php foreach ($item->photos[$album] as $k => $photo) : ?>
-														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album; ?>"">
-															<img src=" /assets/photos/<?php echo $photo['photo']; ?>" alt="Фото" height="15" class="<?php echo $k > 0 ? 'd-none' : NULL; ?>">
+													<!-- <pre>
+														<?php print_r($item->photos[$album_name]); ?>
+													</pre> -->
+													<?php foreach ($item->photos[$album_name] as $k => $photo) : ?>
+														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>"">
+															<img src=" /assets/photos/thumb/<?php echo $photo['photo']; ?>" alt="Фото" height="15" class="<?php echo $k > 0 ? 'd-none' : NULL; ?>">
 														</a>
+														<?php $y++; ?>
 													<?php endforeach; ?>
 												</td>
 											</tr>
@@ -142,8 +149,3 @@
 		</div>
 	</div>
 </div>
-
-<a href="/assets/photos/ad119a7cbf4f70a6613557a7d6309e8f.jpeg" data-lightbox="roadtrip" data-title="My caption">Image #1</a>
-<a href="/assets/photos/f0a64e6c656c6b3da759679c7d9466b9.jpeg" data-lightbox="roadtrip">Image #2</a>
-<a href="/assets/photos/ad119a7cbf4f70a6613557a7d6309e8f.jpeg" data-lightbox="roadtrip">Image #3</a>
-<a href="/assets/photos/0f22f4499336af4b33ba8a4703de3b9c.jpeg" data-lightbox="roadtrip">Image #4</a>

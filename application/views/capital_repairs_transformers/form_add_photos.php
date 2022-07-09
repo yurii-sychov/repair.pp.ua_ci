@@ -22,7 +22,7 @@
 	<div class="row">
 		<div class="col-md-12 mb-3">
 			<label for="photos" class="form-label">Фото</label>
-			<input type="file" name="photo[]" class="form-control" id="photos" accept="image/jpg, image/jpeg" multiple>
+			<input type="file" name="photo[]" class="form-control" id="photos" accept="image/jpeg" multiple>
 			<div class="invalid-feedback"></div>
 		</div>
 	</div>
