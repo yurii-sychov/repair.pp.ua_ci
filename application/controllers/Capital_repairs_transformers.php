@@ -289,8 +289,9 @@ class Capital_repairs_transformers extends CI_Controller
 				}
 			}
 		}
+
 		if (isset($errors)) {
-			foreach ($uploaded_files as $file) {
+			foreach ($uploaded_files['success'] as $file) {
 				unlink('./assets/photos/' . $file);
 			}
 			return $errors;

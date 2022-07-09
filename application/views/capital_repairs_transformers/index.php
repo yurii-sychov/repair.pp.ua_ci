@@ -5,10 +5,10 @@
 		</div>
 
 		<div class="table-responsive">
-			<table class="table table-bordered" id="collapseParent">
+			<table class="table table-bordere" id="collapseParent">
 				<thead>
 					<tr class="text-center">
-						<th style="width: 5%;">№ з/п</th>
+						<th style="width: 5%;">№ п/п</th>
 						<th style="width: 35%;">Підстанція</th>
 						<th style="width: 10%;">Дисп. ім`я</th>
 						<th style="width: 20%;">Тип</th>
@@ -35,10 +35,10 @@
 						</tr>
 						<tr class="collapse collapse-horizontal" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
 							<td colspan="3">
-								<table class="table table-striped table-hover">
+								<table class="table table-striped table-hover table-bordered">
 									<thead>
 										<tr class="text-center">
-											<th style="width: 10%;">№ з/п</th>
+											<th style="width: 10%;">№ п/п</th>
 											<th style="width: 15%;">Дата</th>
 											<th style="width: 65%;" class="text-start">Короткий опис документу</th>
 											<th style="width: 10%;">Дія</th>
@@ -62,10 +62,10 @@
 								</table>
 							</td>
 							<td colspan="4">
-								<table class="table table-striped table-hover">
+								<table class="table table-striped table-hover table-bordered">
 									<thead>
 										<tr class="text-center">
-											<th style="width: 10%;">№ з/п</th>
+											<th style="width: 10%;">№ п/п</th>
 											<th style="width: 15%;">Дата</th>
 											<th style="width: 65%;" class="text-start">Назва фотоальбому</th>
 											<th style="width: 10%;">Дія</th>
@@ -75,21 +75,19 @@
 										<?php $y = 1; ?>
 										<?php foreach ($item->photo_albums as $album_name => $album) : ?>
 											<tr>
-												<td class="text-center"><?php echo $y; ?>
+												<td class="text-center"><?php echo $y; ?></td>
 												<td class="text-center"><?php echo date('d.m.Y', strtotime($album['photo_album_date'])); ?></td>
 												<td><?php echo $album['photo_album_name']; ?></td>
 												<td class="text-center">
-													<!-- <pre>
-														<?php print_r($item->photos[$album_name]); ?>
-													</pre> -->
+
 													<?php foreach ($item->photos[$album_name] as $k => $photo) : ?>
 														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>"">
 															<img src=" /assets/photos/thumb/<?php echo $photo['photo']; ?>" alt="Фото" height="15" class="<?php echo $k > 0 ? 'd-none' : NULL; ?>">
 														</a>
-														<?php $y++; ?>
 													<?php endforeach; ?>
 												</td>
 											</tr>
+											<?php $y++; ?>
 										<?php endforeach; ?>
 									</tbody>
 								</table>
