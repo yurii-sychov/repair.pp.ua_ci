@@ -5,7 +5,7 @@
 		</div>
 
 		<div class="table-responsive">
-			<table class="table table-bordere" id="collapseParent">
+			<table class="table" id="collapseParent">
 				<thead>
 					<tr class="text-center">
 						<th style="width: 5%;">№ п/п</th>
@@ -20,7 +20,7 @@
 				<tbody>
 					<?php $i = 1; ?>
 					<?php foreach ($passports as $item) : ?>
-						<tr class="text-center" data-subdivision_id="<?php echo $item->subdivision_id; ?>" data-complete_renovation_object_id="<?php echo $item->complete_renovation_object_id; ?>" data-specific_renovation_object_id="<?php echo $item->specific_renovation_object_id; ?>" data-place_id="<?php echo $item->place_id; ?>" data-passport_id="<?php echo $item->id; ?>">
+						<tr class="text-center parent" data-subdivision_id="<?php echo $item->subdivision_id; ?>" data-complete_renovation_object_id="<?php echo $item->complete_renovation_object_id; ?>" data-specific_renovation_object_id="<?php echo $item->specific_renovation_object_id; ?>" data-place_id="<?php echo $item->place_id; ?>" data-passport_id="<?php echo $item->id; ?>">
 							<td><?php echo $i; ?></td>
 							<td class="text-start stantion"><?php echo $item->stantion; ?></td>
 							<td class="disp"><?php echo $item->disp; ?></td>
@@ -30,7 +30,7 @@
 							<td>
 								<a href="javascript:void(0);" class="mx-1" onCLick="openAddDocumentModal(event)"><i class="bi bi-card-list text-primary" title="Додати документацію" data-bs-toggle="tooltip"></i></a>
 								<a href="javascript:void(0);" class="mx-1" onCLick="openAddPhotosModal(event)"><i class="bi bi-card-image text-danger" title="Додати фотографії" data-bs-toggle="tooltip"></i></a>
-								<a class="mx-1" data-bs-toggle="collapse" href="#collapse_<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse_<?php echo $i; ?>"><i class="bi bi-eye text-info" title="Більше інформації" data-bs-toggle="tooltip"></i></a>
+								<a class="mx-1" data-bs-toggle="collapse" href="#collapse_<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse_<?php echo $i; ?>"><i class="bi bi-eye text-info" title="Більше інформації" data-bs-toggle="tooltip" onCLick="actionCollapse(event);"></i></a>
 							</td>
 						</tr>
 						<tr class="collapse collapse-horizontal" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
@@ -93,7 +93,7 @@
 								</table>
 							</td>
 						</tr>
-						<script>
+						<!-- <script>
 							var myCollapsible = document.getElementById('collapse_<?php echo $i; ?>');
 							myCollapsible.addEventListener('shown.bs.collapse', function() {
 								$(this).prev().addClass('bg-secondary');
@@ -101,7 +101,7 @@
 							myCollapsible.addEventListener('hide.bs.collapse', function() {
 								$('tr').removeClass('bg-secondary');
 							});
-						</script>
+						</script> -->
 						<?php $i++; ?>
 					<?php endforeach; ?>
 				</tbody>

@@ -225,6 +225,18 @@ function deleteDocument(event) {
 	}
 }
 
+function deletePhotoAlbum(event) {}
+
+function actionCollapse(event) {
+	$(event.currentTarget).toggleClass("bi-eye-slash bi-eye");
+	const tr_current = $(event.currentTarget).closest("tr");
+	const tr_not_current_and_next = $("#collapseParent tbody tr.parent").not(
+		tr_current
+	);
+	tr_current.toggleClass("bg-custom");
+	tr_not_current_and_next.toggle(400);
+}
+
 $(".datepicker").datepicker({
 	format: "dd.mm.yyyy",
 	autoclose: true,
