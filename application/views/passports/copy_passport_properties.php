@@ -28,6 +28,7 @@
 				<div class="col-lg-6">
 					<h6 class="text-center my-2">Вибране лише обладнання по <?php echo $donor->stantion; ?>, та з тим самим типом, що і донор.</h6>
 					<form id="formCopyProperties" method="POST" action="/passports/copy_passport_properties_insert">
+						<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
 						<div class="col-lg-12 my-2">
 							<input type="hidden" value="<?php echo $donor->equipment_id; ?>" name="donor_equipment_id" />
 							<input type="hidden" value="<?php echo $donor->donor_passport_id; ?>" name="donor_passport_id" />

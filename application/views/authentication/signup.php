@@ -17,7 +17,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<span class="fa fa-user-o"></span>
 			</div>
 			<h3 class="text-center mb-4">Не маєш облікового запису?</h3>
-			<form method="POST" class="login-form" id="formSignin">
+			<form method="POST" class="login-form" id="formSignup">
+				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
 				<div class="form-group">
 					<input name="email" type="email" class="form-control rounded-left" placeholder="Введіть email" required>
 				</div>

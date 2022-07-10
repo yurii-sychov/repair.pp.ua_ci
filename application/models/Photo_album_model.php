@@ -16,19 +16,17 @@ class Photo_album_Model extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	public function get_row($id)
+	{
+		$this->db->select('*');
+		$this->db->where('id', $id);
+		$query = $this->db->get('photo_albums');
+		return $query->row();
+	}
+
 	public function delete($id)
 	{
 		$this->db->where('id', $id);
 		$this->db->delete('photo_albums');
-	}
-
-	public function get_photo_albums_for_passport($passport_id)
-	{
-		$this->db->select('photo_albums.*');
-		$this->db->where('photos.photo_album_id = photo_albums.id');
-		$this->db->where('passport_id', $passport_id);
-		$this->db->limit(1);
-		$query = $this->db->get('photos, photo_albums');
-		return $query->result();
 	}
 }

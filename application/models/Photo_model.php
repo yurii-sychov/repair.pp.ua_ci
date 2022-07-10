@@ -24,9 +24,23 @@ class Photo_Model extends CI_Model
 		return $query->row();
 	}
 
+	public function get_rows($photo_album_id)
+	{
+		$this->db->select('*');
+		$this->db->where('photo_album_id', $photo_album_id);
+		$query = $this->db->get('photos');
+		return $query->result();
+	}
+
 	public function delete($id)
 	{
 		$this->db->where('id', $id);
+		$this->db->delete('photos');
+	}
+
+	public function delete_photos($photo_album_id)
+	{
+		$this->db->where('photo_album_id', $photo_album_id);
 		$this->db->delete('photos');
 	}
 
@@ -36,6 +50,7 @@ class Photo_Model extends CI_Model
 		$this->db->where('photos.photo_album_id = photo_albums.id');
 		$this->db->where('passport_id', $passport_id);
 		$this->db->order_by('photo_album_date', 'ASC');
+		$this->db->order_by('photos.photo', 'ASC');
 		$query = $this->db->get('photos, photo_albums');
 		return $query->result();
 	}

@@ -1,4 +1,5 @@
 <form id="formEditPassport">
+	<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
 	<input type="hidden" id="idEdit" name="id" />
 	<div class="row">
 		<div class="col-md-6 mb-3">

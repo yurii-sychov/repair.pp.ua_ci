@@ -1,4 +1,5 @@
 <form id="formAddOperatingList">
+	<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
 	<input type="hidden" name="subdivision_id" value="" id="idSubdivisionIdAdd" />
 	<input type="hidden" name="complete_renovation_object_id" value="" id="idCompleteRenovationObjectIdAdd" />
 	<input type="hidden" name="specific_renovation_object_id" value="" id="idSpecificRenovationObjectIdAdd" />

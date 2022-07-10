@@ -24,17 +24,21 @@ class Capital_repairs_transformers extends CI_Controller
 			redirect('authentication/signin');
 		}
 
-		if ($this->session->user->group !== 'admin' && $this->session->user->group !== 'sdzp' && $this->session->user->group !== 'director') {
+		if ($this->session->user->group !== 'admin' && $this->session->user->group !== 'sp' && $this->session->user->group !== 'sdzp' && $this->session->user->group !== 'head') {
 			show_404();
 		}
+		$this->load->library('pagination');
+		$this->load->library('user_agent');
+
 		$this->load->model('passport_model');
 		$this->load->model('document_model');
 		$this->load->model('photo_album_model');
 		$this->load->model('photo_model');
 	}
 
-	public function index()
+	public function index($page = NULL)
 	{
+		$this->load->helper('form');
 		$data = [];
 		$data['title'] = 'Капітальні ремонти силових трансформаторів';
 		$data['content'] = 'capital_repairs_transformers/index';
@@ -43,8 +47,16 @@ class Capital_repairs_transformers extends CI_Controller
 		$data['datatables'] = TRUE;
 		$data['title_heading'] = 'Капітальні ремонти силових трансформаторів';
 		$data['title_heading_card'] = 'Силові трансформатори 35-150 кв';
-		$passports = $this->passport_model->get_capital_repairs_of_transformers();
 
+		$this->load->helper('config_pagination');
+		$config = get_config_pagination();
+		$this->pagination->initialize($config);
+
+		$per_page = $config['per_page'];
+		$offset = $this->input->get('page') ? ($this->input->get('page') - 1) * $per_page : 0;
+		$total_rows = $config['total_rows'];
+
+		$passports = $this->passport_model->get_capital_repairs_of_transformers($per_page, $offset);
 
 		foreach ($passports as $passport) {
 
@@ -70,6 +82,10 @@ class Capital_repairs_transformers extends CI_Controller
 			}
 		}
 
+		$data['per_page'] = !$this->input->get('page') ? 1 : (($this->input->get('page') - 1) * $per_page + 1);
+		$data['offset'] = $this->input->get('page') ? $offset : $per_page;
+		$data['total_rows'] = $total_rows;
+
 		$data['passports'] = $passports;
 		// echo "<pre>";
 		// print_r($passports);
@@ -88,7 +104,7 @@ class Capital_repairs_transformers extends CI_Controller
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('document_date', 'Дата створення документу', 'required');
-		$this->form_validation->set_rules('document_description', 'Короткий опис документу', 'required|min_length[3]|max_length[49]');
+		$this->form_validation->set_rules('document_description', 'Короткий опис документу', 'required|min_length[3]|max_length[255]');
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
@@ -126,10 +142,9 @@ class Capital_repairs_transformers extends CI_Controller
 		}
 
 		$this->load->library('form_validation');
-		// $this->load->library('image_lib');
 
 		$this->form_validation->set_rules('photo_album_date', 'Дата створення альбому', 'required');
-		$this->form_validation->set_rules('photo_album_name', 'Назва альбому', 'required|min_length[3]|max_length[49]');
+		$this->form_validation->set_rules('photo_album_name', 'Назва альбому', 'required|min_length[3]|max_length[255]');
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
@@ -231,7 +246,36 @@ class Capital_repairs_transformers extends CI_Controller
 			$this->document_model->delete($id);
 		}
 
-		redirect('/capital_repairs_transformers');
+		redirect($this->agent->referrer());
+	}
+
+	public function delete_photo_album($id = NULL)
+	{
+		if (!is_numeric($id)) {
+			show_404();
+		}
+
+		$photo_album = $this->photo_album_model->get_row($id);
+
+		if (!$photo_album) {
+			show_404();
+		}
+
+		$photos = $this->photo_model->get_rows($photo_album->id);
+
+		foreach ($photos as $photo) {
+			if (file_exists('./assets/photos/' . $photo->photo)) {
+				unlink('./assets/photos/' . $photo->photo);
+			}
+			if (file_exists('./assets/photos/thumb/' . $photo->photo)) {
+				unlink('./assets/photos/thumb/' . $photo->photo);
+			}
+		}
+
+		$this->photo_model->delete_photos($photo_album->id);
+		$this->photo_album_model->delete($id);
+
+		redirect($this->agent->referrer());
 	}
 
 	private function upload_file()

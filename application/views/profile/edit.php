@@ -2,6 +2,7 @@
 	<div class="card-body">
 		<?php echo form_error('name'); ?>
 		<form method="POST" class="needs-validation <?php echo $this->input->post() ? 'has-validated' : NULL; ?>">
+			<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
 			<div class="card-header mb-2">
 				<h5><?php echo $title_heading_card; ?></h5>
 			</div>

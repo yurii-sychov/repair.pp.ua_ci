@@ -4,6 +4,7 @@
 			<h5><?php echo $title_heading_card; ?></h5>
 		</div>
 		<form method="POST" class="needs-validation <?php echo $this->input->post() ? 'has-validated' : NULL; ?>">
+			<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
 			<div class="row">
 				<div class="col-lg-12 mb-3">
 					<label for="Name" class="form-label"><strong>Ваше ім`я</strong></label>

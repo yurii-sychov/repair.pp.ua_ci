@@ -120,6 +120,7 @@ $(document).ready(function () {
 					? "/passports/get_data_server_side"
 					: "/passports/get_data",
 				type: "POST",
+				// data: ''
 				// data: serverSide ? null : { post: 1 },
 			},
 
@@ -731,7 +732,7 @@ function getDataPassport(event) {
 	let id = $(event.currentTarget).closest("tr").data("id");
 	$.ajax({
 		method: "POST",
-		url: "/passports/get_data_passport/",
+		url: "/passports/get_data_passport",
 		data: { id },
 	}).done(function (data) {
 		if (data.status === "SUCCESS") {

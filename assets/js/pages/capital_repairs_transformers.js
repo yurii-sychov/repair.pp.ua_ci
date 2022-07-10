@@ -225,7 +225,16 @@ function deleteDocument(event) {
 	}
 }
 
-function deletePhotoAlbum(event) {}
+function deletePhotoAlbum(event) {
+	let result = confirm("Ви впевнені?");
+	if (result) {
+		location.href =
+			"/capital_repairs_transformers/delete_photo_album/" +
+			$(event.currentTarget).parents("tr").data("id");
+	} else {
+		return;
+	}
+}
 
 function actionCollapse(event) {
 	$(event.currentTarget).toggleClass("bi-eye-slash bi-eye");

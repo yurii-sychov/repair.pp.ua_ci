@@ -448,12 +448,25 @@ $config['global_xss_filtering'] = TRUE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = FALSE;
+$config['csrf_protection'] = TRUE;
 $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
-$config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array();
+$config['csrf_regenerate'] = FALSE;
+$config['csrf_exclude_uris'] = [
+	'passports/get_data_server_side',
+	'multi_year_schedule/get_data_server_side',
+	'passports/get_properties',
+	'passports/get_data_passport',
+	'passports/get_places',
+	'passports/edit_property',
+	'passports/edit_operating_list',
+	'passports/delete_operating_list',
+	'multi_year_schedule/change_cipher_ajax',
+	'multi_year_schedule/change_periodicity_ajax',
+	'multi_year_schedule/change_year_service_ajax',
+	'multi_year_schedule/change_status_ajax',
+];
 
 /*
 |--------------------------------------------------------------------------

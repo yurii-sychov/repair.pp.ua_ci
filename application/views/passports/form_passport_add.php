@@ -1,4 +1,5 @@
 <form id="formAddPassport">
+	<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
 	<div class="row">
 		<div class="col-md-6 mb-3">
 			<label for="idStantionAdd" class="form-label">Підстанція</label>

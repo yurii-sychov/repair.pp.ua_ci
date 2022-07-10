@@ -4,6 +4,21 @@
 			<h5><?php echo $title_heading_card; ?></h5>
 		</div>
 
+		<form action="/capital_repairs_transformers/index" method="GET">
+			<div class="row justify-content-start">
+				<div class="col-lg-3 mb-1">
+					<input type="text" class="form-control" placeholder="Введіть підстанцію для пошуку" name="stantion" value="<?php echo $this->input->get('stantion') ? $this->input->get('stantion') : NULL; ?>" required minlength="3" autocomplete="off" />
+				</div>
+				<div class="col-lg-4 mb-1 d-grid gap-2 d-lg-block">
+					<button type="submit" class="btn btn-primary">Шукати</button>
+					<?php if ($this->input->get('stantion')) : ?>
+						<a href="/capital_repairs_transformers/index" class="btn btn-success">Скинути</a>
+					<?php endif; ?>
+				</div>
+			</div>
+		</form>
+		<hr />
+
 		<div class="table-responsive">
 			<table class="table" id="collapseParent">
 				<thead>
@@ -18,7 +33,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php $i = 1; ?>
+					<?php $i = $per_page; ?>
 					<?php foreach ($passports as $item) : ?>
 						<tr class="text-center parent" data-subdivision_id="<?php echo $item->subdivision_id; ?>" data-complete_renovation_object_id="<?php echo $item->complete_renovation_object_id; ?>" data-specific_renovation_object_id="<?php echo $item->specific_renovation_object_id; ?>" data-place_id="<?php echo $item->place_id; ?>" data-passport_id="<?php echo $item->id; ?>">
 							<td><?php echo $i; ?></td>
@@ -74,17 +89,15 @@
 									<tbody>
 										<?php $y = 1; ?>
 										<?php foreach ($item->photo_albums as $album_name => $album) : ?>
-											<tr>
+											<tr data-id="<?php echo $album['id']; ?>">
 												<td class="text-center"><?php echo $y; ?></td>
 												<td class="text-center"><?php echo date('d.m.Y', strtotime($album['photo_album_date'])); ?></td>
 												<td><?php echo $album['photo_album_name']; ?></td>
 												<td class="text-center">
-
 													<?php foreach ($item->photos[$album_name] as $k => $photo) : ?>
-														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>"">
-															<img src=" /assets/photos/thumb/<?php echo $photo['photo']; ?>" alt="Фото" height="15" class="<?php echo $k > 0 ? 'd-none' : NULL; ?>">
-														</a>
+														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>" title="Подивитись фотоальбом" data-bs-toggle="tooltip"><img src=" /assets/photos/thumb/<?php echo $photo['photo']; ?>" alt="Фото" height="10" class="<?php echo $k > 0 ? 'd-none' : NULL; ?>"></a>
 													<?php endforeach; ?>
+													<a href="javascript:void(0);" class="mx-1" onClick="deletePhotoAlbum(event);"><i class="bi bi-trash text-danger" title="Видалити фотоальбом" data-bs-toggle="tooltip"></i></a>
 												</td>
 											</tr>
 											<?php $y++; ?>
@@ -93,20 +106,17 @@
 								</table>
 							</td>
 						</tr>
-						<!-- <script>
-							var myCollapsible = document.getElementById('collapse_<?php echo $i; ?>');
-							myCollapsible.addEventListener('shown.bs.collapse', function() {
-								$(this).prev().addClass('bg-secondary');
-							});
-							myCollapsible.addEventListener('hide.bs.collapse', function() {
-								$('tr').removeClass('bg-secondary');
-							});
-						</script> -->
 						<?php $i++; ?>
 					<?php endforeach; ?>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th colspan="7">Показано з <?php echo $per_page; ?> по <?php echo $i - 1; ?> запис з <?php echo isset($total_filter_rows) ? $total_filter_rows : $total_rows; ?> записів</th>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
+		<?php echo $this->pagination->create_links(); ?>
 	</div>
 </div>
 
