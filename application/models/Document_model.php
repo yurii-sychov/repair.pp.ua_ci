@@ -37,4 +37,14 @@ class Document_Model extends CI_Model
 		$query = $this->db->get('documents');
 		return $query->result();
 	}
+
+	public function get_value($field)
+	{
+		$this->db->select($field);
+		$this->db->distinct();
+		// $this->db->where('created_by', $this->session->user->id);
+		$this->db->order_by($field);
+		$query = $this->db->get('documents');
+		return $query->result();
+	}
 }

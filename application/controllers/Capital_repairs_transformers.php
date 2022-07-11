@@ -68,12 +68,14 @@ class Capital_repairs_transformers extends CI_Controller
 
 			foreach ($photos as $item) {
 				if ($passport->id == $item->passport_id) {
-					$passport->photo_albums[$item->photo_album_name]['id'] = $item->photo_album_id;
-					$passport->photo_albums[$item->photo_album_name]['photo_album_date'] = $item->photo_album_date;
-					$passport->photo_albums[$item->photo_album_name]['photo_album_name'] = $item->photo_album_name;
+					$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['id'] = $item->photo_album_id;
+					$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['photo_album_date'] = $item->photo_album_date;
+					$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['photo_album_name'] = $item->photo_album_name;
+					$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['created_by'] = $item->created_by;
+					$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['created_at'] = $item->created_at;
 				}
 
-				$group_photos[$item->photo_album_name][] = [
+				$group_photos['photo_album_id_' . $item->photo_album_id][] = [
 					'id ' => $item->id,
 					'photo_date' => $item->photo_date,
 					'photo' => $item->photo,
@@ -88,7 +90,7 @@ class Capital_repairs_transformers extends CI_Controller
 
 		$data['passports'] = $passports;
 		// echo "<pre>";
-		// print_r($passports);
+		// print_r($passports[0]);
 		// echo "</pre>";
 		$this->load->view('layout', $data);
 	}
@@ -242,6 +244,10 @@ class Capital_repairs_transformers extends CI_Controller
 			show_404();
 		}
 
+		if ($this->session->user->id != $document->created_by) {
+			show_404();
+		}
+
 		if (unlink('./assets/documents/' . $document->document_scan)) {
 			$this->document_model->delete($id);
 		}
@@ -258,6 +264,10 @@ class Capital_repairs_transformers extends CI_Controller
 		$photo_album = $this->photo_album_model->get_row($id);
 
 		if (!$photo_album) {
+			show_404();
+		}
+
+		if ($this->session->user->id != $photo_album->created_by) {
 			show_404();
 		}
 
@@ -386,5 +396,15 @@ class Capital_repairs_transformers extends CI_Controller
 		$data['created_at'] = date('Y-m-d H:i:s');
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		return $data;
+	}
+
+	public function get_value($value = NULL)
+	{
+		if (!$value) {
+			show_404();
+		}
+		$data['values'] = $this->document_model->get_value($value);
+		$data['field'] = $value;
+		$this->load->view('value', $data);
 	}
 }

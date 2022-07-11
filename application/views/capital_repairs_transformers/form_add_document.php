@@ -15,7 +15,9 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12 mb-3">
-			<label for="documentDescription" class="form-label">Короткий опис документу</label>
+			<label for="documentDescription" class="form-label">
+				<?php echo anchor_popup('/capital_repairs_transformers/get_value/document_description', 'Короткий опис документу', ['width' => 800, 'height' => 600, 'scrollbars'  => 'yes', 'status' => 'yes', 'resizable' => 'yes', 'screenx' => 0, 'screeny' => 0, 'window_name' => '_blank']); ?>
+			</label>
 			<input type="text" name="document_description" class="form-control" id="documentDescription" placeholder="Введіть короткий опис документу" maxlength="255">
 			<div class="invalid-feedback"></div>
 		</div>

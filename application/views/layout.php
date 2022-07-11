@@ -17,6 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="csrf_test_name" content="<?php echo $this->security->get_csrf_hash(); ?>">
 
 	<!-- Bootstrap CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -61,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<li class="nav-item">
 						<a class="nav-link <?php if ($page === 'passports/index') : ?>active<?php endif; ?>" aria-current="page" href="/passports">Паспорти</a>
 					</li>
-					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sdzp' || $this->session->user->group === 'director') : ?>
+					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sp' || $this->session->user->group === 'sdzp' || $this->session->user->group === 'head') : ?>
 						<li class="nav-item">
 							<a class="nav-link <?php if ($page === 'capital_repairs_transformers/index') : ?>active<?php endif; ?>" aria-current="page" href="/capital_repairs_transformers">КРСТ</a>
 						</li>

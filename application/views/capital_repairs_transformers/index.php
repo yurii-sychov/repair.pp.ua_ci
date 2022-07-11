@@ -5,7 +5,7 @@
 		</div>
 
 		<form action="/capital_repairs_transformers/index" method="GET">
-			<div class="row justify-content-start">
+			<div class="row justify-content-start mb-2">
 				<div class="col-lg-3 mb-1">
 					<input type="text" class="form-control" placeholder="Введіть підстанцію для пошуку" name="stantion" value="<?php echo $this->input->get('stantion') ? $this->input->get('stantion') : NULL; ?>" required minlength="3" autocomplete="off" />
 				</div>
@@ -17,12 +17,11 @@
 				</div>
 			</div>
 		</form>
-		<hr />
 
 		<div class="table-responsive">
 			<table class="table" id="collapseParent">
 				<thead>
-					<tr class="text-center">
+					<tr class="text-center align-middle">
 						<th style="width: 5%;">№ п/п</th>
 						<th style="width: 35%;">Підстанція</th>
 						<th style="width: 10%;">Дисп. ім`я</th>
@@ -52,7 +51,7 @@
 							<td colspan="3">
 								<table class="table table-striped table-hover table-bordered">
 									<thead>
-										<tr class="text-center">
+										<tr class="text-center align-middle">
 											<th style="width: 10%;">№ п/п</th>
 											<th style="width: 15%;">Дата</th>
 											<th style="width: 65%;" class="text-start">Короткий опис документу</th>
@@ -68,7 +67,9 @@
 												<td><?php echo $doc->document_description; ?></td>
 												<td class="text-center">
 													<a href="/assets/documents/<?php echo $doc->document_scan; ?>" class="mx-1" target="_blank"><i class="bi bi-file-pdf-fill text-warning" title="Завантажити документ" data-bs-toggle="tooltip"></i></a>
-													<a href="javascript:void(0);" class="mx-1" onClick="deleteDocument(event);"><i class="bi bi-trash text-danger" title="Видалити документ" data-bs-toggle="tooltip"></i></a>
+													<?php if ($this->session->user->id == $doc->created_by || $this->session->user->group === 'admin') : ?>
+														<a href="javascript:void(0);" class="mx-1" onClick="deleteDocument(event);"><i class="bi bi-trash text-danger" title="Видалити документ" data-bs-toggle="tooltip"></i></a>
+													<?php endif; ?>
 												</td>
 											</tr>
 											<?php $y++; ?>
@@ -79,7 +80,7 @@
 							<td colspan="4">
 								<table class="table table-striped table-hover table-bordered">
 									<thead>
-										<tr class="text-center">
+										<tr class="text-center align-middle">
 											<th style="width: 10%;">№ п/п</th>
 											<th style="width: 15%;">Дата</th>
 											<th style="width: 65%;" class="text-start">Назва фотоальбому</th>
@@ -97,7 +98,9 @@
 													<?php foreach ($item->photos[$album_name] as $k => $photo) : ?>
 														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>" title="Подивитись фотоальбом" data-bs-toggle="tooltip"><img src=" /assets/photos/thumb/<?php echo $photo['photo']; ?>" alt="Фото" height="10" class="<?php echo $k > 0 ? 'd-none' : NULL; ?>"></a>
 													<?php endforeach; ?>
-													<a href="javascript:void(0);" class="mx-1" onClick="deletePhotoAlbum(event);"><i class="bi bi-trash text-danger" title="Видалити фотоальбом" data-bs-toggle="tooltip"></i></a>
+													<?php if ($this->session->user->id == $album['created_by'] || $this->session->user->group === 'admin') : ?>
+														<a href="javascript:void(0);" class="mx-1" onClick="deletePhotoAlbum(event);"><i class="bi bi-trash text-danger" title="Видалити фотоальбом" data-bs-toggle="tooltip"></i></a>
+													<?php endif; ?>
 												</td>
 											</tr>
 											<?php $y++; ?>
