@@ -244,7 +244,7 @@ class Capital_repairs_transformers extends CI_Controller
 			show_404();
 		}
 
-		if ($this->session->user->id != $document->created_by) {
+		if ($this->session->user->id != $document->created_by && $this->session->user->group !== 'admin') {
 			show_404();
 		}
 
@@ -267,7 +267,7 @@ class Capital_repairs_transformers extends CI_Controller
 			show_404();
 		}
 
-		if ($this->session->user->id != $photo_album->created_by) {
+		if ($this->session->user->id != $photo_album->created_by && $this->session->user->group !== 'admin') {
 			show_404();
 		}
 

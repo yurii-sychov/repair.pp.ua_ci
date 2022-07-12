@@ -42,8 +42,9 @@
 							<td><?php echo $item->number; ?></td>
 							<td><?php echo date('Y', strtotime($item->production_date)); ?></td>
 							<td>
-								<a href="javascript:void(0);" class="mx-1" onCLick="openAddDocumentModal(event)"><i class="bi bi-card-list text-primary" title="Додати документацію" data-bs-toggle="tooltip"></i></a>
-								<a href="javascript:void(0);" class="mx-1" onCLick="openAddPhotosModal(event)"><i class="bi bi-card-image text-danger" title="Додати фотографії" data-bs-toggle="tooltip"></i></a>
+								<a href="javascript:void(0);" class="mx-1" onCLick="openOperatingListModal(event)"><i class="bi bi-list-columns text-warning" title="Подивитись експлуатаційну відомість СП" data-bs-toggle="tooltip"></i></a>
+								<a href="javascript:void(0);" class="mx-1" onCLick="openAddDocumentModal(event)"><i class="bi bi-files text-success" title="Додати документацію" data-bs-toggle="tooltip"></i></a>
+								<a href="javascript:void(0);" class="mx-1" onCLick="openAddPhotosModal(event)"><i class="bi bi-camera text-danger" title="Додати фотографії" data-bs-toggle="tooltip"></i></a>
 								<a class="mx-1" data-bs-toggle="collapse" href="#collapse_<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse_<?php echo $i; ?>"><i class="bi bi-eye text-info" title="Більше інформації" data-bs-toggle="tooltip" onCLick="actionCollapse(event);"></i></a>
 							</td>
 						</tr>
@@ -66,9 +67,11 @@
 												<td class="text-center"><?php echo date('d.m.Y', strtotime($doc->document_date)); ?></td>
 												<td><?php echo $doc->document_description; ?></td>
 												<td class="text-center">
-													<a href="/assets/documents/<?php echo $doc->document_scan; ?>" class="mx-1" target="_blank"><i class="bi bi-file-pdf-fill text-warning" title="Завантажити документ" data-bs-toggle="tooltip"></i></a>
+													<a href="/assets/documents/<?php echo $doc->document_scan; ?>" class="mx-1" target="_blank"><i class="bi bi-file-pdf-fill text-warning" title="Подивитись документ" data-bs-toggle="tooltip"></i></a>
 													<?php if ($this->session->user->id == $doc->created_by || $this->session->user->group === 'admin') : ?>
 														<a href="javascript:void(0);" class="mx-1" onClick="deleteDocument(event);"><i class="bi bi-trash text-danger" title="Видалити документ" data-bs-toggle="tooltip"></i></a>
+													<?php else : ?>
+														<a href="javascript:void(0);" class="mx-1"><i class="bi bi-trash text-secondary" title="Ви не можете видалити цей файл" data-bs-toggle="tooltip"></i></a>
 													<?php endif; ?>
 												</td>
 											</tr>
@@ -93,13 +96,15 @@
 											<tr data-id="<?php echo $album['id']; ?>">
 												<td class="text-center"><?php echo $y; ?></td>
 												<td class="text-center"><?php echo date('d.m.Y', strtotime($album['photo_album_date'])); ?></td>
-												<td><?php echo $album['photo_album_name']; ?></td>
+												<td><?php echo $album['photo_album_name'] . ' (' . count($item->photos[$album_name]) . ' фото)'; ?></td>
 												<td class="text-center">
 													<?php foreach ($item->photos[$album_name] as $k => $photo) : ?>
-														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>" title="Подивитись фотоальбом" data-bs-toggle="tooltip"><img src=" /assets/photos/thumb/<?php echo $photo['photo']; ?>" alt="Фото" height="10" class="<?php echo $k > 0 ? 'd-none' : NULL; ?>"></a>
+														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>" title="Подивитись фотоальбом" data-bs-toggle="tooltip"><i class="bi bi-card-image text-warning <?php echo $k > 0 ? 'd-none' : NULL; ?>"></i></a>
 													<?php endforeach; ?>
 													<?php if ($this->session->user->id == $album['created_by'] || $this->session->user->group === 'admin') : ?>
 														<a href="javascript:void(0);" class="mx-1" onClick="deletePhotoAlbum(event);"><i class="bi bi-trash text-danger" title="Видалити фотоальбом" data-bs-toggle="tooltip"></i></a>
+													<?php else : ?>
+														<a href="javascript:void(0);" class="mx-1"><i class="bi bi-trash text-secondary" title="Ви не можете видалити цей фотоальбом" data-bs-toggle="tooltip"></i></a>
 													<?php endif; ?>
 												</td>
 											</tr>
@@ -156,6 +161,22 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
 				<button type="button" class="btn btn-primary" onClick="addPhotos(event)">Зберегти</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal OperatingList -->
+<div class="modal fade" id="operatingListModal" tabindex="-1" aria-labelledby="operatingListModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="operatingListModalLabel">Експлуатаційна відомість</h5>
+			</div>
+			<div class="modal-body">OperatingList (розробка)
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
 			</div>
 		</div>
 	</div>

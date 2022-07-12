@@ -204,6 +204,11 @@ function openAddPhotosModal(event) {
 	modal.modal("show");
 }
 
+function openOperatingListModal(event) {
+	const modal = $("#operatingListModal");
+	modal.modal("show");
+}
+
 $("#addDocumentModal, #addPhotosModal").on("hidden.bs.modal", function (event) {
 	$(event.target).find(".row select, .row input").val("");
 	$(event.target)
@@ -237,7 +242,9 @@ function deletePhotoAlbum(event) {
 }
 
 function actionCollapse(event) {
-	$(event.currentTarget).toggleClass("bi-eye-slash bi-eye");
+	$(event.currentTarget).toggleClass(
+		"bi-eye-slash text-primary bi-eye text-info"
+	);
 	const tr_current = $(event.currentTarget).closest("tr");
 	const tr_not_current_and_next = $("#collapseParent tbody tr.parent").not(
 		tr_current

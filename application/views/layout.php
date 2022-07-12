@@ -56,20 +56,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<a class="nav-link <?php if ($page === 'multi_year_schedule/index') : ?>active<?php endif; ?>" aria-current="page" href="/multi_year_schedule">Графік</a>
 						</li>
 					<?php endif; ?>
-					<li class="nav-item">
-						<a class="nav-link <?php if ($page === 'complete_renovation_objects/index') : ?>active<?php endif; ?>" aria-current="page" href="/complete_renovation_objects">Енергетичні об`єкти</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link <?php if ($page === 'passports/index') : ?>active<?php endif; ?>" aria-current="page" href="/passports">Паспорти</a>
-					</li>
+
+					<?php if (($this->session->user->group === 'admin' || $this->session->user->group === 'master') && ($this->session->user->group !== 'sp' || $this->session->user->group !== 'sdzp' || $this->session->user->group !== 'head')) : ?>
+						<li class="nav-item">
+							<a class="nav-link <?php if ($page === 'complete_renovation_objects/index') : ?>active<?php endif; ?>" aria-current="page" href="/complete_renovation_objects">Енергетичні об`єкти</a>
+						</li>
+					<?php endif; ?>
+
+					<?php if (($this->session->user->group === 'admin' || $this->session->user->group === 'master') && ($this->session->user->group !== 'sp' || $this->session->user->group !== 'sdzp' || $this->session->user->group !== 'head')) : ?>
+						<li class="nav-item">
+							<a class="nav-link <?php if ($page === 'passports/index') : ?>active<?php endif; ?>" aria-current="page" href="/passports">Паспорти</a>
+						</li>
+					<?php endif; ?>
+
 					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sp' || $this->session->user->group === 'sdzp' || $this->session->user->group === 'head') : ?>
 						<li class="nav-item">
 							<a class="nav-link <?php if ($page === 'capital_repairs_transformers/index') : ?>active<?php endif; ?>" aria-current="page" href="/capital_repairs_transformers">КРСТ</a>
 						</li>
 					<?php endif; ?>
-					<li class="nav-item">
-						<a class="nav-link <?php if ($page === 'protective_arsenal/index') : ?>active<?php endif; ?>" aria-current="page" href="/protective_arsenal">Захисні засоби</a>
-					</li>
+
+					<?php if (($this->session->user->group === 'admin' || $this->session->user->group === 'master') && ($this->session->user->group !== 'sp' || $this->session->user->group !== 'sdzp' || $this->session->user->group !== 'head')) : ?>
+						<li class="nav-item">
+							<a class="nav-link <?php if ($page === 'protective_arsenal/index') : ?>active<?php endif; ?>" aria-current="page" href="/protective_arsenal">Захисні засоби</a>
+						</li>
+					<?php endif; ?>
+
 					<?php if ($this->session->user->group === 'admin') : ?>
 						<li class="nav-item">
 							<a class="nav-link <?php if ($page === 'logs/index') : ?>active<?php endif; ?>" aria-current="page" href="/logs">Логи</a>
