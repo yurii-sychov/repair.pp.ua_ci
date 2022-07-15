@@ -269,3 +269,11 @@ lightbox.option({
 	wrapAround: true,
 	albumLabel: "Зображення %1 з %2",
 });
+
+const containerScrollbarStantions = new PerfectScrollbar(
+	"#containerScrollbarStantions"
+);
+
+const containerScrollbarSubdivitions = new PerfectScrollbar(
+	"#containerScrollbarSubdivitions"
+);

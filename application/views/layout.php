@@ -31,9 +31,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
 	<link rel="stylesheet" type="text/css" href="/assets/css/custom.css" />
 
-	<?php if ($page === 'capital_repairs_transformers/index') : ?>
+	<?php if ($page === 'capital_repairs_transformers/index' || $page === 'capital_repairs_transformers/sdzp') : ?>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" integrity="sha512-ZKX+BvQihRJPA8CROKBhDNvoc2aDMOdAlcm7TUQY+35XYtrd3yh95QOOhsPDQY9QnKE0Wqag9y38OIgEvb88cA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<?php endif; ?>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/css/perfect-scrollbar.min.css" integrity="sha512-ygIxOy3hmN2fzGeNqys7ymuBgwSCet0LVfqQbWY10AszPMn2rB9JY0eoG0m1pySicu+nvORrBmhHVSt7+GI9VA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<link rel="icon" href="/assets/images/favicon.png" />
 
@@ -69,9 +71,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</li>
 					<?php endif; ?>
 
-					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sp' || $this->session->user->group === 'sdzp' || $this->session->user->group === 'head') : ?>
+					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sp') : ?>
 						<li class="nav-item">
 							<a class="nav-link <?php if ($page === 'capital_repairs_transformers/index') : ?>active<?php endif; ?>" aria-current="page" href="/capital_repairs_transformers">КРСТ</a>
+						</li>
+					<?php endif; ?>
+
+					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sp' || $this->session->user->group === 'sdzp' || $this->session->user->group === 'head') : ?>
+						<li class="nav-item">
+							<a class="nav-link <?php if ($page === 'capital_repairs_transformers/sdzp') : ?>active<?php endif; ?>" aria-current="page" href="/capital_repairs_transformers/sdzp">КРСТ_1</a>
 						</li>
 					<?php endif; ?>
 
@@ -146,12 +154,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<script src="https://cdn.datatables.net/v/bs5/dt-1.11.3/datatables.min.js"></script>
 	<?php endif; ?>
 
-	<?php if ($page === 'capital_repairs_transformers/index') : ?>
+	<?php if ($page === 'capital_repairs_transformers/index' || $page === 'capital_repairs_transformers/sdzp') : ?>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" integrity="sha512-k2GFCTbp9rQU412BStrcD/rlwv1PYec9SNrkbQlo6RZCf75l6KcC3UwDY8H5n5hl4v77IDtIPwOk9Dqjs/mMBQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<?php endif; ?>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js" integrity="sha512-d4KkQohk+HswGs6A1d6Gak6Bb9rMWtxjOa0IiY49Q3TeFd5xAzjWXDCBW9RS7m86FQ4RzM2BdHmdJnnKRYknxw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js" integrity="sha512-X41/A5OSxoi5uqtS6Krhqz8QyyD8E/ZbN7B4IaBSgqPLRbWVuXJXr9UwOujstj71SoVxh5vxgy7kmtd17xrJRw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 	<?php if (isset($page_js)) : ?>
 		<script src="/assets/js/pages/<?php echo $page_js; ?>.js?v=<?php echo date("Y-m-d"); ?>"></script>

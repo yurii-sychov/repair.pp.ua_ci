@@ -132,3 +132,14 @@
 .datepicker-dropdown.datepicker-orient-top:before {
 	border-top: 7px solid rgba(0, 0, 0, 0.1);
 }
+
+/* #containerScrollbarStantions,
+#containerScrollbarSubdivitions {
+	position: relative;
+	height: 400px;
+} */
+
+#containerScrollbarSubdivitions .card-body:hover,
+#containerScrollbarStantions .card-body:hover {
+	background: #d6d6d6;
+}

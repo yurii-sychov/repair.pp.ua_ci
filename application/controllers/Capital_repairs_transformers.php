@@ -30,6 +30,8 @@ class Capital_repairs_transformers extends CI_Controller
 		$this->load->library('pagination');
 		$this->load->library('user_agent');
 
+		$this->load->model('subdivision_model');
+		$this->load->model('complete_renovation_object_model');
 		$this->load->model('passport_model');
 		$this->load->model('document_model');
 		$this->load->model('photo_album_model');
@@ -93,6 +95,90 @@ class Capital_repairs_transformers extends CI_Controller
 		// print_r($passports[0]);
 		// echo "</pre>";
 		$this->load->view('layout', $data);
+	}
+
+	public function sdzp($subdivision = NULL, $stantion = NULL)
+	{
+		$data = [];
+		$data['title'] = 'Капітальні ремонти силових трансформаторів';
+		$data['content'] = 'capital_repairs_transformers/sdzp';
+		$data['page'] = 'capital_repairs_transformers/sdzp';
+		$data['page_js'] = 'capital_repairs_transformers';
+		$data['datatables'] = TRUE;
+		$data['title_heading'] = 'Капітальні ремонти силових трансформаторів';
+		$data['title_heading_card_sp'] = 'СП підстанціїї 110-150 (35) кВ';
+		$data['title_heading_card_srm'] = 'СРМ (РЕМ)';
+
+		if (!$subdivision && !$stantion) {
+			$data['content'] = 'capital_repairs_transformers/sdzp';
+
+			$data['stantions_sp'] = $this->complete_renovation_object_model->get_data_sp();
+			$data['subdivision_srm'] = $this->subdivision_model->get_data_srm();
+
+			$this->load->view('layout', $data);
+		}
+
+		if ($subdivision && !$stantion) {
+			if (!is_numeric($subdivision)) {
+				show_404();
+			}
+
+			$data['content'] = 'capital_repairs_transformers/stantions';
+			$data['title_heading_card_srm'] = $this->subdivision_model->get_row($subdivision)->name . ' підстанції 35 кВ';
+
+			$data['stantions_sp'] = $this->complete_renovation_object_model->get_data_sp();
+			$data['stantions_srm'] = $this->complete_renovation_object_model->get_data_for_subdivision($subdivision);
+			$this->load->view('layout', $data);
+		}
+
+		if ($subdivision && $stantion) {
+			if (!is_numeric($subdivision) || !is_numeric($stantion)) {
+				show_404();
+			}
+
+			$data['content'] = 'capital_repairs_transformers/transformaters';
+
+			$data['trasformaters'] = $this->passport_model->get_transformers($subdivision, $stantion);
+
+			if (!$data['trasformaters']) {
+				show_404();
+			}
+
+			$this->load->view('layout', $data);
+		}
+
+		// $passports = $this->passport_model->get_capital_repairs_of_transformers();
+
+		// foreach ($passports as $passport) {
+
+		// 	$passport->documents = $this->document_model->get_documents_for_passport($passport->id);
+		// 	$photos = $this->photo_model->get_photos_for_passport($passport->id);
+
+		// 	$passport->photo_albums = [];
+		// 	$passport->photos = [];
+
+		// 	foreach ($photos as $item) {
+		// 		if ($passport->id == $item->passport_id) {
+		// 			$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['id'] = $item->photo_album_id;
+		// 			$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['photo_album_date'] = $item->photo_album_date;
+		// 			$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['photo_album_name'] = $item->photo_album_name;
+		// 			$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['created_by'] = $item->created_by;
+		// 			$passport->photo_albums['photo_album_id_' . $item->photo_album_id]['created_at'] = $item->created_at;
+		// 		}
+
+		// 		$group_photos['photo_album_id_' . $item->photo_album_id][] = [
+		// 			'id ' => $item->id,
+		// 			'photo_date' => $item->photo_date,
+		// 			'photo' => $item->photo,
+		// 		];
+		// 		$passport->photos = $group_photos;
+		// 	}
+		// }
+
+		// $data['passports'] = $passports;
+		// echo "<pre>";
+		// print_r($passports[0]);
+		// echo "</pre>";
 	}
 
 	public function add_document()
@@ -313,8 +399,9 @@ class Capital_repairs_transformers extends CI_Controller
 	private function upload_files()
 	{
 		$config['upload_path'] = './assets/photos';
-		$config['allowed_types'] = 'jpeg|jpg';
+		$config['allowed_types'] = 'jpeg';
 		$config['encrypt_name'] = TRUE;
+		$config['file_ext_tolower'] = TRUE;
 
 		if (!file_exists('./assets/photos')) {
 			mkdir('./assets/photos', 0755);
@@ -325,9 +412,11 @@ class Capital_repairs_transformers extends CI_Controller
 		$count = count($_FILES['photo']['name']);
 
 		$files = $_FILES;
-		for ($i = 0; $i < $count; $i++) {
+
+		for ($i = 0; $i < 50; $i++) {
 			$this->upload->initialize($config);
-			if (!empty($_FILES['photo']['name'][$i])) {
+
+			if (!empty($files['photo']['name'][$i])) {
 				$_FILES['photo']['name'] = $files['photo']['name'][$i];
 				$_FILES['photo']['type'] = $files['photo']['type'][$i];
 				$_FILES['photo']['tmp_name'] = $files['photo']['tmp_name'][$i];

@@ -18,4 +18,25 @@ class Subdivision_Model extends CI_Model
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+	public function get_row($id)
+	{
+		$this->db->select('*');
+		$this->db->where('id', $id);
+		$this->db->from('subdivisions');
+		$query = $this->db->get();
+		return $query->row();
+	}
+
+	public function get_data_srm()
+	{
+		$this->db->select('*');
+		$this->db->from('subdivisions');
+		$this->db->where_not_in('id', 1);
+		$this->db->where_not_in('id', 2);
+		$this->db->where_not_in('id', 23);
+		$this->db->order_by('name', 'asc');
+		$query = $this->db->get();
+		return $query->result();
+	}
 }

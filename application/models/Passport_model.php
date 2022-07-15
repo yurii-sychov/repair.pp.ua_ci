@@ -247,26 +247,19 @@ class Passport_Model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	// public function get_capital_repairs_of_transformers_with_filter($per_page, $offset)
-	// {
-	// 	$this->db->select('passports.*, complete_renovation_objects.name as stantion, equipments.name as equipment, specific_renovation_objects.name as disp');
-	// 	$this->db->from('passports, complete_renovation_objects, specific_renovation_objects, equipments');
-	// 	$this->db->where('passports.complete_renovation_object_id = complete_renovation_objects.id');
-	// 	$this->db->where('specific_renovation_objects.equipment_id = equipments.id');
-	// 	$this->db->where('passports.specific_renovation_object_id = specific_renovation_objects.id');
-	// 	// $this->db->where('passports.complete_renovation_object_id = users_complete_renovation_objects.object_id');
-	// 	// $this->db->where('users_complete_renovation_objects.user_id', $this->session->user->id);
-	// 	$this->db->where('equipments.id = 19');
-	// 	$this->db->where('specific_renovation_objects.voltage_class_id >= 3');
-	// 	$this->db->where('specific_renovation_objects.voltage_class_id <= 5');
-	// 	if ($this->input->get('stantion')) {
-	// 		$this->db->like('complete_renovation_objects.name', $this->input->get('stantion'));
-	// 	}
-	// 	$this->db->order_by('stantion', 'ASC');
-	// 	$this->db->order_by('disp', 'ASC');
-	// 	$this->db->limit($per_page, $offset);
-	// 	$query = $this->db->get();
+	public function get_transformers($subdivision_id, $complete_renovation_object_id)
+	{
+		$this->db->select('passports.*, complete_renovation_objects.name as stantion, equipments.name as equipment, specific_renovation_objects.name as disp');
+		$this->db->from('passports, complete_renovation_objects, specific_renovation_objects, equipments');
+		$this->db->where('passports.complete_renovation_object_id = complete_renovation_objects.id');
+		$this->db->where('specific_renovation_objects.equipment_id = equipments.id');
+		$this->db->where('passports.specific_renovation_object_id = specific_renovation_objects.id');
+		$this->db->where('passports.subdivision_id', $subdivision_id);
+		$this->db->where('passports.complete_renovation_object_id', $complete_renovation_object_id);
+		$this->db->where('equipments.id = 19');
+		$this->db->order_by('disp', 'ASC');
+		$query = $this->db->get();
 
-	// 	return $query->result();
-	// }
+		return $query->result();
+	}
 }
