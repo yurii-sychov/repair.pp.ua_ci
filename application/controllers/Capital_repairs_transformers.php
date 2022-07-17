@@ -107,7 +107,7 @@ class Capital_repairs_transformers extends CI_Controller
 		$data['datatables'] = TRUE;
 		$data['title_heading'] = 'Капітальні ремонти силових трансформаторів';
 		$data['title_heading_card_sp'] = 'СП підстанціїї 110-150 (35) кВ';
-		$data['title_heading_card_srm'] = 'СРМ (РЕМ)';
+		$data['title_heading_card_srm'] = 'СРМ (РЕМи)';
 
 		if (!$subdivision && !$stantion) {
 			$data['content'] = 'capital_repairs_transformers/sdzp';

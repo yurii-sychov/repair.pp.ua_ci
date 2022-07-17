@@ -270,10 +270,10 @@ lightbox.option({
 	albumLabel: "Зображення %1 з %2",
 });
 
-const containerScrollbarStantions = new PerfectScrollbar(
-	"#containerScrollbarStantions"
-);
+const containerScrollbar_1 = new PerfectScrollbar("#containerScrollbar_1");
 
-const containerScrollbarSubdivitions = new PerfectScrollbar(
-	"#containerScrollbarSubdivitions"
-);
+if (containerScrollbar_1) $("#containerScrollbar_1").show();
+
+const containerScrollbar_2 = new PerfectScrollbar("#containerScrollbar_2");
+
+if (containerScrollbar_2) $("#containerScrollbar_2").show();

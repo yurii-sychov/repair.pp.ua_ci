@@ -32,13 +32,10 @@ class Complete_renovation_object_Model extends CI_Model
 
 	public function get_data_for_subdivision($subdivision_id)
 	{
-		$this->db->select('complete_renovation_objects.*');
-		$this->db->from('complete_renovation_objects, specific_renovation_objects, passports');
-		$this->db->where('complete_renovation_objects.id = passports.complete_renovation_object_id');
-		$this->db->where('specific_renovation_objects.id = passports.specific_renovation_object_id');
-		$this->db->where('specific_renovation_objects.equipment_id', 19);
-		$this->db->where('complete_renovation_objects.subdivision_id', $subdivision_id);
-		$this->db->order_by('complete_renovation_objects.name', 'asc');
+		$this->db->select('*');
+		$this->db->from('complete_renovation_objects');
+		$this->db->where('subdivision_id', $subdivision_id);
+		$this->db->order_by('name', 'asc');
 		$query = $this->db->get();
 		return $query->result();
 	}

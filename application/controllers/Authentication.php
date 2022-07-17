@@ -200,9 +200,9 @@ class Authentication extends CI_Controller
 		$this->load->library('email');
 
 		$config['protocol'] = 'smtp';
-		$config['smtp_host'] = 'localhost';
-		$config['smtp_user'] = 'yurii@sychov.pp.ua';
-		$config['smtp_pass'] = '0910Yurasis';
+		$config['smtp_host'] = 's1.thehost.com.ua';
+		$config['smtp_user'] = 'admin@sychov.pp.ua';
+		$config['smtp_pass'] = 'Yuras0910';
 
 		$this->email->initialize($config);
 

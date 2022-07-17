@@ -133,13 +133,13 @@
 	border-top: 7px solid rgba(0, 0, 0, 0.1);
 }
 
-/* #containerScrollbarStantions,
-#containerScrollbarSubdivitions {
+#containerScrollbar_1,
+#containerScrollbar_2 {
 	position: relative;
-	height: 400px;
-} */
+	/* height: 400px; */
+}
 
-#containerScrollbarSubdivitions .card-body:hover,
-#containerScrollbarStantions .card-body:hover {
+#containerScrollbar_1 .card-body:hover,
+#containerScrollbar_2 .card-body:hover {
 	background: #d6d6d6;
 }

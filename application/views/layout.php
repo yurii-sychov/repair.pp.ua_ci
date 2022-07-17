@@ -71,7 +71,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</li>
 					<?php endif; ?>
 
-					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sp') : ?>
+					<?php if ($this->session->user->group === 'admin' || $this->session->user->group === 'sp' || $this->session->user->group === 'sdzp' || $this->session->user->group === 'head') : ?>
 						<li class="nav-item">
 							<a class="nav-link <?php if ($page === 'capital_repairs_transformers/index') : ?>active<?php endif; ?>" aria-current="page" href="/capital_repairs_transformers">КРСТ</a>
 						</li>
