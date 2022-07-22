@@ -9,6 +9,9 @@
 				<div class="col-lg-3 mb-1">
 					<input type="text" class="form-control" placeholder="Введіть підстанцію для пошуку" name="stantion" value="<?php echo $this->input->get('stantion') ? $this->input->get('stantion') : NULL; ?>" required minlength="3" autocomplete="off" />
 				</div>
+				<div class="col-lg-3 mb-1">
+					<input type="text" class="form-control" placeholder="Введіть диспечерську назву для пошуку" name="disp" value="<?php echo $this->input->get('disp') ? $this->input->get('disp') : NULL; ?>" minlength="1" autocomplete="off" />
+				</div>
 				<div class="col-lg-4 mb-1 d-grid gap-2 d-lg-block">
 					<button type="submit" class="btn btn-primary">Шукати</button>
 					<?php if ($this->input->get('stantion')) : ?>
@@ -48,7 +51,7 @@
 								<a class="mx-1" data-bs-toggle="collapse" href="#collapse_<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse_<?php echo $i; ?>"><i class="bi bi-eye text-info" title="Більше інформації" data-bs-toggle="tooltip" onCLick="actionCollapse(event);"></i></a>
 							</td>
 						</tr>
-						<tr class="collapse collapse-horizontal" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
+						<tr class="collapse collapse-horizontal <?php echo count($passports) == 1 ? 'show' : NULL; ?>" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
 							<td colspan="3">
 								<table class="table table-striped table-hover table-bordered">
 									<thead>

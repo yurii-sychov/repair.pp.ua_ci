@@ -46,10 +46,9 @@ class Capital_repairs_transformers extends CI_Controller
 		$data['content'] = 'capital_repairs_transformers/index';
 		$data['page'] = 'capital_repairs_transformers/index';
 		$data['page_js'] = 'capital_repairs_transformers';
-		$data['datatables'] = TRUE;
+		$data['datatables'] = FALSE;
 		$data['title_heading'] = 'Капітальні ремонти силових трансформаторів';
 		$data['title_heading_card'] = 'Силові трансформатори 35-150 кв';
-
 		$this->load->helper('config_pagination');
 		$config = get_config_pagination();
 		$this->pagination->initialize($config);
@@ -106,7 +105,7 @@ class Capital_repairs_transformers extends CI_Controller
 		$data['page_js'] = 'capital_repairs_transformers';
 		$data['datatables'] = TRUE;
 		$data['title_heading'] = 'Капітальні ремонти силових трансформаторів';
-		$data['title_heading_card_sp'] = 'СП підстанціїї 110-150 (35) кВ';
+		$data['title_heading_card_sp'] = 'СП підстанції 110-150 (35) кВ';
 		$data['title_heading_card_srm'] = 'СРМ (РЕМи)';
 
 		if (!$subdivision && !$stantion) {

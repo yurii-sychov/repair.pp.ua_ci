@@ -221,6 +221,9 @@ class Passport_Model extends CI_Model
 		if ($this->input->get('stantion')) {
 			$this->db->like('complete_renovation_objects.name', $this->input->get('stantion'));
 		}
+		if ($this->input->get('disp')) {
+			$this->db->like('specific_renovation_objects.name', $this->input->get('disp'));
+		}
 		$this->db->order_by('stantion', 'ASC');
 		$this->db->order_by('disp', 'ASC');
 		$this->db->limit($per_page, $offset);
@@ -241,6 +244,9 @@ class Passport_Model extends CI_Model
 		$this->db->where('specific_renovation_objects.voltage_class_id <= 5');
 		if ($this->input->get('stantion')) {
 			$this->db->like('complete_renovation_objects.name', $this->input->get('stantion'));
+		}
+		if ($this->input->get('disp')) {
+			$this->db->like('specific_renovation_objects.name', $this->input->get('disp'));
 		}
 		$this->db->get();
 

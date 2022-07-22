@@ -150,7 +150,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-	<?php if (isset($datatables)) : ?>
+	<?php if (isset($datatables) && $datatables) : ?>
 		<script src="https://cdn.datatables.net/v/bs5/dt-1.11.3/datatables.min.js"></script>
 	<?php endif; ?>
 
@@ -163,7 +163,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js" integrity="sha512-X41/A5OSxoi5uqtS6Krhqz8QyyD8E/ZbN7B4IaBSgqPLRbWVuXJXr9UwOujstj71SoVxh5vxgy7kmtd17xrJRw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-	<?php if (isset($page_js)) : ?>
+	<?php if (isset($page_js) && $page_js) : ?>
 		<script src="/assets/js/pages/<?php echo $page_js; ?>.js?v=<?php echo date("Y-m-d"); ?>"></script>
 	<?php endif; ?>
 </body>
