@@ -15,6 +15,7 @@ class Type_service_Model extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('type_services');
+		$this->db->order_by('name', 'ASC');
 		$query = $this->db->get();
 		return $query->result();
 	}

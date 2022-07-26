@@ -47,6 +47,7 @@ class Complete_renovation_objects extends CI_Controller
 		$this->load->model('operating_list_object_model');
 		// $this->load->model('schedule_model');
 		$this->load->model('complete_renovation_object_model');
+		$this->load->model('type_service_model');
 		// $this->load->model('specific_renovation_object_model');
 		// $this->load->model('equipment_model');
 		// $this->load->model('voltage_class_model');
@@ -69,6 +70,7 @@ class Complete_renovation_objects extends CI_Controller
 		$data['title_heading'] = 'Енергетичні об`єкти';
 		$data['title_heading_card'] = 'Енергетичні об`єкти';
 		$data['stantions'] = $this->complete_renovation_object_model->get_data_with_subdivision_for_user();
+		$data['type_services'] = $this->type_service_model->get_data();
 		// $data['equipments'] = $this->equipment_model->get_data();
 		// $data['voltage_class'] = $this->voltage_class_model->get_data();
 		// $data['insulation_type'] = $this->insulation_type_model->get_data();
@@ -164,6 +166,7 @@ class Complete_renovation_objects extends CI_Controller
 
 		$data['subdivision_id'] = $post['subdivision_id'];
 		$data['complete_renovation_object_id'] = $post['complete_renovation_object_id'];
+		$data['type_service_id'] = $post['type_service_id'] ? $post['type_service_id'] : 0;
 		$data['service_date'] = date('Y-m-d', strtotime($post['service_date']));
 		$data['service_data'] = $post['service_data'];
 		$data['executor'] = $post['executor'];

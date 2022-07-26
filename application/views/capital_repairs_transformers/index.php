@@ -37,7 +37,7 @@
 				<tbody>
 					<?php $i = $per_page; ?>
 					<?php foreach ($passports as $item) : ?>
-						<tr class="text-center parent" data-subdivision_id="<?php echo $item->subdivision_id; ?>" data-complete_renovation_object_id="<?php echo $item->complete_renovation_object_id; ?>" data-specific_renovation_object_id="<?php echo $item->specific_renovation_object_id; ?>" data-place_id="<?php echo $item->place_id; ?>" data-passport_id="<?php echo $item->id; ?>">
+						<tr class="text-center parent <?php echo count($passports) == 1 ? 'bg-custom' : NULL; ?>" data-subdivision_id="<?php echo $item->subdivision_id; ?>" data-complete_renovation_object_id="<?php echo $item->complete_renovation_object_id; ?>" data-specific_renovation_object_id="<?php echo $item->specific_renovation_object_id; ?>" data-place_id="<?php echo $item->place_id; ?>" data-passport_id="<?php echo $item->id; ?>">
 							<td><?php echo $i; ?></td>
 							<td class="text-start stantion"><?php echo $item->stantion; ?></td>
 							<td class="disp"><?php echo $item->disp; ?></td>
