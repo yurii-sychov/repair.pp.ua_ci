@@ -15,8 +15,10 @@
 				<thead>
 					<tr class="text-center">
 						<th style="width:5%;">ID</th>
-						<th style="width:45%;">Підрозділ</th>
-						<th style="width:40%;">Об`єкт</th>
+						<th style="width:30%;">Підрозділ</th>
+						<th style="width:30%;">Об`єкт</th>
+						<th style="width:10%;">Кількість записів</th>
+						<th style="width:15%;">Остання дата</th>
 						<th style="width:10%;">Дія</th>
 					</tr>
 				</thead>
@@ -26,6 +28,8 @@
 							<td class="text-center"><?php echo $item->id; ?></td>
 							<td><?php echo $item->subdivision; ?></td>
 							<td class="stantion"><?php echo $item->name; ?></td>
+							<td class="text-center"><?php echo $item->count_rows ? $item->count_rows : '-'; ?></td>
+							<td class="text-center"><?php echo $item->create_last_date ? $item->create_last_date : '-'; ?></td>
 							<td class="text-center">
 								<a href="javascript:void(0);" class="mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Додати експлуатаційні дані по об`єкту" onclick="openAddOperatingListObjectModal(event)"><i class="bi bi-journal-plus text-success"></i></a>
 							</td>

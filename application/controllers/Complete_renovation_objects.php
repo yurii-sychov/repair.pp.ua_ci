@@ -48,6 +48,7 @@ class Complete_renovation_objects extends CI_Controller
 		// $this->load->model('schedule_model');
 		$this->load->model('complete_renovation_object_model');
 		$this->load->model('type_service_model');
+		$this->load->model('operating_list_object_model');
 		// $this->load->model('specific_renovation_object_model');
 		// $this->load->model('equipment_model');
 		// $this->load->model('voltage_class_model');
@@ -67,10 +68,18 @@ class Complete_renovation_objects extends CI_Controller
 		$data['page'] = 'complete_renovation_objects/index';
 		$data['page_js'] = 'complete_renovation_objects';
 		$data['datatables'] = TRUE;
-		$data['title_heading'] = 'Енергетичні об`єкти';
-		$data['title_heading_card'] = 'Енергетичні об`єкти';
-		$data['stantions'] = $this->complete_renovation_object_model->get_data_with_subdivision_for_user();
+		$data['title_heading'] = 'Енергетичні об`єкти (Експлуатаційна відомість)';
+		$data['title_heading_card'] = 'Власне енергетичні об`єкти';
+		$stantions = $this->complete_renovation_object_model->get_data_with_subdivision_for_user();
+		// $data['stantions'] = $this->complete_renovation_object_model->get_data_with_subdivision_for_user();
 		$data['type_services'] = $this->type_service_model->get_data();
+
+		$arr_temp = [];
+		foreach ($stantions as $stantion) {
+			$stantion->count_rows = $this->operating_list_object_model->get_count_rows($stantion->id);
+			$stantion->create_last_date = $this->operating_list_object_model->get_max_create_date_row($stantion->id);
+		}
+		$data['stantions'] = $stantions;
 		// $data['equipments'] = $this->equipment_model->get_data();
 		// $data['voltage_class'] = $this->voltage_class_model->get_data();
 		// $data['insulation_type'] = $this->insulation_type_model->get_data();

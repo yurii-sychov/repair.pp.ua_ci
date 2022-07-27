@@ -155,6 +155,7 @@
 				?>
 			</div>
 			<div class="modal-footer">
+				<button type="button" class="btn btn-info disabled">Розблокувати неактивні поля</button>
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
 				<button type="button" class="btn btn-primary action" onclick="addOperatingList(event);">Зберегти</button>
 			</div>

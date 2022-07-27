@@ -78,6 +78,22 @@ class Operating_list_object_Model extends CI_Model
 	// 	return $query;
 	// }
 
+	public function get_count_rows($stantion_id)
+	{
+		$this->db->select('id');
+		$this->db->where('complete_renovation_object_id', $stantion_id);
+		$query = $this->db->get('operating_list_objects');
+		return count($query->result());
+	}
+
+	public function get_max_create_date_row($stantion_id)
+	{
+		$this->db->select_max('created_at');
+		$this->db->where('complete_renovation_object_id', $stantion_id);
+		$query = $this->db->get('operating_list_objects');
+		return $query->row('created_at');
+	}
+
 	public function get_value($field)
 	{
 		$this->db->select($field);

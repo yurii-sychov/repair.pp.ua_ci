@@ -7,6 +7,42 @@
 	<input type="hidden" name="passport_id" value="" id="idPassportIdAdd" />
 	<div class="row">
 		<div class="col-md-12 mb-3">
+			<label for="" class="form-label">Підрозділ</label>
+			<select class="form-select" id="" disabled>
+				<option value="">Оберіть підрозділ</option>
+			</select>
+			<div class="invalid-feedback"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 mb-3">
+			<label for="" class="form-label">Підстанція</label>
+			<select class="form-select" id="" disabled>
+				<option value="">Оберіть підстанцію</option>
+			</select>
+			<div class="invalid-feedback"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 mb-3">
+			<label for="" class="form-label">Диспечерське найменування</label>
+			<select class="form-select" id="" disabled>
+				<option value="">Оберіть диспечерське найменування</option>
+			</select>
+			<div class="invalid-feedback"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 mb-3">
+			<label for="" class="form-label">Місце встановлення</label>
+			<select class="form-select" id="" disabled>
+				<option value="">Оберіть місце встановлення</option>
+			</select>
+			<div class="invalid-feedback"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 mb-3">
 			<label for="idServiceDateAdd" class="form-label">Дата обслуговування обладнання</label>
 			<input type="text" class="form-control datemask datepicker" id="idServiceDateAdd" placeholder="Введіть дату обслуговування обладнання" name="service_date" autocomplete="on">
 			<div class="invalid-feedback"></div>
