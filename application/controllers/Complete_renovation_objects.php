@@ -48,7 +48,6 @@ class Complete_renovation_objects extends CI_Controller
 		// $this->load->model('schedule_model');
 		$this->load->model('complete_renovation_object_model');
 		$this->load->model('type_service_model');
-		$this->load->model('operating_list_object_model');
 		// $this->load->model('specific_renovation_object_model');
 		// $this->load->model('equipment_model');
 		// $this->load->model('voltage_class_model');
@@ -155,6 +154,96 @@ class Complete_renovation_objects extends CI_Controller
 				return;
 			}
 		}
+	}
+
+	public function gen_operating_list_object_pdf($id = NULL)
+	{
+		if (!is_numeric($id)) {
+			show_404();
+		}
+
+		$data = [];
+		$complete_renovation_object = $this->complete_renovation_object_model->get_row($id);
+		if (!$complete_renovation_object) {
+			show_404();
+		}
+		$type_services = $this->type_service_model->get_data();
+		$operating_list = $this->operating_list_object_model->get_data_for_object($id);
+		foreach ($operating_list as $item) {
+			$item->type_service_short_name = NULL;
+			$item->type_service_name = NULL;
+			foreach ($type_services as $type_service) {
+				if ($item->type_service_id == $type_service->id) {
+					$item->type_service_short_name = $type_service->short_name;
+					$item->type_service_name = $type_service->name;
+				}
+			}
+		}
+		$data['complete_renovation_object'] = $complete_renovation_object;
+		$data['results'] = $operating_list;
+
+
+		// echo "<pre>";
+		// print_r($data);
+		// print_r($operating_list);
+		// print_r($equipments_group);
+		// echo "</pre>";
+		// exit;
+
+		// create new PDF document
+		$pdf = new MYPDF('L', PDF_UNIT, 'A3', true, 'UTF-8', false);
+
+		// set document information
+		$pdf->SetAuthor('Yurii Sychov');
+		$pdf->SetTitle('Operating list Object');
+
+		// set default header data
+		// $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0, 64, 255), array(0, 64, 128));
+		// $pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+
+		// set header and footer fonts
+		// $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		// $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+		// set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+		// set image scale factor
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+		// set default font subsetting mode
+		$pdf->setFontSubsetting(true);
+
+		// Set font
+		// dejavusans is a UTF-8 Unicode font, if you only need to
+		// print standard ASCII chars, you can use core fonts like
+		// helvetica or times to reduce file size.
+		$pdf->SetFont('dejavusans', '', 12, '', true);
+
+		// Add a page
+		// This method has several options, check the source code documentation for more information.
+		$pdf->AddPage();
+
+		// set text shadow effect
+		$pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+
+		// Set some content to print
+		$html = $this->load->view('complete_renovation_objects/operating_list_object_pdf', $data, TRUE);
+
+		// Print text using writeHTMLCell()
+		$pdf->writeHTMLCell(0, 0, '', 15, $html, 0, 1, 0, true, '', true);
+
+		// Close and output PDF document
+		// This method has several options, check the source code documentation for more information.
+		$pdf->Output('operating_list_object.pdf', 'I');
 	}
 
 

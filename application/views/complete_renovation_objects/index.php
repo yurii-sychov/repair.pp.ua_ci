@@ -32,6 +32,7 @@
 							<td class="text-center"><?php echo $item->create_last_date ? $item->create_last_date : '-'; ?></td>
 							<td class="text-center">
 								<a href="javascript:void(0);" class="mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Додати експлуатаційні дані по об`єкту" onclick="openAddOperatingListObjectModal(event)"><i class="bi bi-journal-plus text-success"></i></a>
+								<a href="/complete_renovation_objects/gen_operating_list_object_pdf/<?php echo $item->id; ?>" class="mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Завантажити експлуатаційні дані по об`єкту"><i class="bi bi-eye text-info"></i></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>

@@ -94,6 +94,20 @@ class Operating_list_object_Model extends CI_Model
 		return $query->row('created_at');
 	}
 
+	public function get_data_for_object($complete_renovation_object_id)
+	{
+		$this->db->select('operating_list_objects.*, subdivisions.name as subdivision, complete_renovation_objects.name as stantion');
+		$this->db->from('operating_list_objects, subdivisions, complete_renovation_objects');
+		$this->db->where('operating_list_objects.complete_renovation_object_id', $complete_renovation_object_id);
+		$this->db->where('operating_list_objects.subdivision_id = subdivisions.id');
+		$this->db->where('operating_list_objects.complete_renovation_object_id = complete_renovation_objects.id');
+		// $this->db->where('operating_list_objects.type_service_id = type_services.id');
+		$this->db->order_by('service_date', 'ASC');
+		$this->db->order_by('service_data', 'ASC');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	public function get_value($field)
 	{
 		$this->db->select($field);

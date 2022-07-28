@@ -84,7 +84,9 @@ $(".datepicker").datepicker({
 	autoclose: true,
 });
 
-var exampleEl = $('[data-bs-toggle="tooltip"]');
-if (tooltip) {
-	var tooltip = new bootstrap.Tooltip(exampleEl);
+let exampleEl = $('[data-bs-toggle="tooltip"]');
+if (exampleEl) {
+	for (let i = 0; i < exampleEl.length; i++) {
+		let tooltip = new bootstrap.Tooltip(exampleEl[i]);
+	}
 }
