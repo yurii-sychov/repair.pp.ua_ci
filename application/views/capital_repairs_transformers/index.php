@@ -22,9 +22,9 @@
 		</form>
 
 		<div class="table-responsive">
-			<table class="table" id="collapseParent">
+			<table class="table table-hover align-middle" id="collapseParent">
 				<thead>
-					<tr class="text-center align-middle">
+					<tr class="text-center">
 						<th style="width: 5%;">№ п/п</th>
 						<th style="width: 35%;">Підстанція</th>
 						<th style="width: 10%;">Дисп. ім`я</th>
@@ -53,9 +53,9 @@
 						</tr>
 						<tr class="collapse collapse-horizontal <?php echo count($passports) == 1 ? 'show' : NULL; ?>" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
 							<td colspan="3">
-								<table class="table table-striped table-hover table-bordered">
+								<table class="table table-striped table-hover table-bordered align-middle">
 									<thead>
-										<tr class="text-center align-middle">
+										<tr class="text-center">
 											<th style="width: 10%;">№ п/п</th>
 											<th style="width: 15%;">Дата</th>
 											<th style="width: 65%;" class="text-start">Короткий опис документу</th>
@@ -70,7 +70,7 @@
 												<td class="text-center"><?php echo date('d.m.Y', strtotime($doc->document_date)); ?></td>
 												<td><?php echo $doc->document_description; ?></td>
 												<td class="text-center">
-													<a href="/assets/documents/<?php echo $doc->document_scan; ?>" class="mx-1" target="_blank"><i class="bi bi-file-pdf-fill text-warning" title="Подивитись документ" data-bs-toggle="tooltip"></i></a>
+													<a href="/uploads/documents/<?php echo $doc->document_scan; ?>" class="mx-1" target="_blank"><i class="bi bi-file-pdf-fill text-warning" title="Подивитись документ" data-bs-toggle="tooltip"></i></a>
 													<?php if ($this->session->user->id == $doc->created_by || $this->session->user->group === 'admin') : ?>
 														<a href="javascript:void(0);" class="mx-1" onClick="deleteDocument(event);"><i class="bi bi-trash text-danger" title="Видалити документ" data-bs-toggle="tooltip"></i></a>
 													<?php else : ?>
@@ -102,7 +102,7 @@
 												<td><?php echo $album['photo_album_name'] . ' (' . count($item->photos[$album_name]) . ' фото)'; ?></td>
 												<td class="text-center">
 													<?php foreach ($item->photos[$album_name] as $k => $photo) : ?>
-														<a href="/assets/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>" title="Подивитись фотоальбом" data-bs-toggle="tooltip"><i class="bi bi-card-image text-warning <?php echo $k > 0 ? 'd-none' : NULL; ?>"></i></a>
+														<a href="/uploads/photos/<?php echo $photo['photo']; ?>" data-lightbox="image_<?php echo $album_name; ?>" title="Подивитись фотоальбом" data-bs-toggle="tooltip"><i class="bi bi-card-image text-warning <?php echo $k > 0 ? 'd-none' : NULL; ?>"></i></a>
 													<?php endforeach; ?>
 													<?php if ($this->session->user->id == $album['created_by'] || $this->session->user->group === 'admin') : ?>
 														<a href="javascript:void(0);" class="mx-1" onClick="deletePhotoAlbum(event);"><i class="bi bi-trash text-danger" title="Видалити фотоальбом" data-bs-toggle="tooltip"></i></a>

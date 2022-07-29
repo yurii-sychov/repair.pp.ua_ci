@@ -23,6 +23,13 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12 mb-3">
+			<label for="idActNumber" class="form-label">Номер акту R3</label>
+			<input type="text" class="form-control" id="idActNumber" placeholder="Введіть номер акту R3" name="act_number" autocomplete="on">
+			<div class="invalid-feedback"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 mb-3">
 			<label for="idServiceDataAdd" class="form-label">
 				<?php echo anchor_popup('/complete_renovation_objects/get_value/service_data', 'Дані з експлуатації по об`єкту', ['width' => 800, 'height' => 600, 'scrollbars'  => 'yes', 'status' => 'yes', 'resizable' => 'yes', 'screenx' => 0, 'screeny' => 0, 'window_name' => '_blank']); ?>
 			</label>
@@ -39,8 +46,12 @@
 			<div class="invalid-feedback"></div>
 		</div>
 	</div>
+	<hr />
 	<div class="row">
-		<div class="col-md-12 mb-3 places">
+		<div class="col-md-12 mb-3">
+			<label for="idActScanAdd" class="form-label">Сканкопія акту в форматі PDF</label>
+			<input type="file" name="act_scan" class="form-control" id="idActScanAdd" accept=".pdf" disabled>
+			<div class="invalid-feedback"></div>
 		</div>
 	</div>
 </form>

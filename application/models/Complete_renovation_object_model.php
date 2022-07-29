@@ -51,16 +51,35 @@ class Complete_renovation_object_Model extends CI_Model
 		return $query->result();
 	}
 
-	public function get_data_with_subdivision_for_user()
+	public function get_data_with_subdivision_for_user($per_page, $offset)
 	{
 		$this->db->select('complete_renovation_objects.*, subdivisions.name as subdivision');
 		$this->db->from('complete_renovation_objects, subdivisions');
 		$this->db->join('users_complete_renovation_objects', 'complete_renovation_objects.id = users_complete_renovation_objects.object_id');
 		$this->db->where('complete_renovation_objects.subdivision_id = subdivisions.id');
 		$this->db->where('users_complete_renovation_objects.user_id', $this->session->user->id);
+		if ($this->input->get('subdivision_id')) {
+			$this->db->where('complete_renovation_objects.subdivision_id', $this->input->get('subdivision_id'));
+		}
 		$this->db->order_by('complete_renovation_objects.name', 'asc');
+		$this->db->limit($per_page, $offset);
 		$query = $this->db->get();
 		return $query->result();
+	}
+
+	public function get_total_complete_renovation_objects()
+	{
+		$this->db->select('complete_renovation_objects.*, subdivisions.name as subdivision');
+		$this->db->from('complete_renovation_objects, subdivisions');
+		$this->db->join('users_complete_renovation_objects', 'complete_renovation_objects.id = users_complete_renovation_objects.object_id');
+		$this->db->where('complete_renovation_objects.subdivision_id = subdivisions.id');
+		$this->db->where('users_complete_renovation_objects.user_id', $this->session->user->id);
+		if ($this->input->get('subdivision_id')) {
+			$this->db->where('complete_renovation_objects.subdivision_id', $this->input->get('subdivision_id'));
+		}
+		$this->db->get();
+
+		return $this->db->affected_rows();
 	}
 
 	public function get_row($id)

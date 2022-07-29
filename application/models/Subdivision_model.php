@@ -19,6 +19,19 @@ class Subdivision_Model extends CI_Model
 		return $query->result();
 	}
 
+	public function get_data_for_user()
+	{
+		$this->db->select('subdivisions.*');
+		$this->db->distinct();
+		$this->db->from('subdivisions, complete_renovation_objects, users_complete_renovation_objects');
+		$this->db->where('subdivisions.id = complete_renovation_objects.subdivision_id');
+		$this->db->where('complete_renovation_objects.id = users_complete_renovation_objects.object_id');
+		$this->db->where('users_complete_renovation_objects.user_id', $this->session->user->id);
+		$this->db->order_by('subdivisions.name', 'asc');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	public function get_row($id)
 	{
 		$this->db->select('*');

@@ -43,18 +43,13 @@ class Complete_renovation_objects extends CI_Controller
 		if ($this->session->user->group !== 'admin' && $this->session->user->group !== 'master') {
 			show_404();
 		}
-		// $this->load->model('passport_model');
+		$this->load->library('pagination');
+		$this->load->library('user_agent');
+
+		$this->load->model('subdivision_model');
 		$this->load->model('operating_list_object_model');
-		// $this->load->model('schedule_model');
 		$this->load->model('complete_renovation_object_model');
 		$this->load->model('type_service_model');
-		// $this->load->model('specific_renovation_object_model');
-		// $this->load->model('equipment_model');
-		// $this->load->model('voltage_class_model');
-		// $this->load->model('insulation_type_model');
-		// $this->load->model('place_model');
-		// $this->load->model('property_model');
-		// $this->load->model('passport_property_model');
 		$this->load->model('log_model');
 	}
 
@@ -68,24 +63,54 @@ class Complete_renovation_objects extends CI_Controller
 		$data['page_js'] = 'complete_renovation_objects';
 		$data['datatables'] = TRUE;
 		$data['title_heading'] = 'Енергетичні об`єкти (Експлуатаційна відомість)';
-		$data['title_heading_card'] = 'Власне енергетичні об`єкти';
-		$stantions = $this->complete_renovation_object_model->get_data_with_subdivision_for_user();
-		// $data['stantions'] = $this->complete_renovation_object_model->get_data_with_subdivision_for_user();
-		$data['type_services'] = $this->type_service_model->get_data();
+		$data['title_heading_card'] = 'Енергетичні об`єкти';
 
-		$arr_temp = [];
+		$data['subdivisions'] = $this->subdivision_model->get_data_for_user();
+		$data['count_subdivisions'] = count($data['subdivisions']);
+		$type_services = $this->type_service_model->get_data();
+
+		// Start Pagination
+		$link = '/complete_renovation_objects/index/';
+		$total_rows = $this->complete_renovation_object_model->get_total_complete_renovation_objects();
+
+		$this->load->helper('config_pagination');
+		$config = get_config_pagination($link, $total_rows);
+		$this->pagination->initialize($config);
+
+		$per_page = $config['per_page'];
+		$offset = $this->input->get('page') ? ($this->input->get('page') - 1) * $per_page : 0;
+		$total_rows = $config['total_rows'];
+
+		$data['per_page'] = !$this->input->get('page') ? 1 : (($this->input->get('page') - 1) * $per_page + 1);
+		$data['offset'] = $this->input->get('page') ? $offset : $per_page;
+		$data['total_rows'] = $total_rows;
+		// End Pagination
+
+		$stantions = $this->complete_renovation_object_model->get_data_with_subdivision_for_user($per_page, $offset);
+
 		foreach ($stantions as $stantion) {
 			$stantion->count_rows = $this->operating_list_object_model->get_count_rows($stantion->id);
 			$stantion->create_last_date = $this->operating_list_object_model->get_max_create_date_row($stantion->id);
+
+			$stantion->operating_data = $this->operating_list_object_model->get_data_for_object($stantion->id);
+			foreach ($stantion->operating_data as $val) {
+				$val->type_service_short_name = '-';
+				$val->type_service_name = '-';
+				foreach ($type_services as $type_service) {
+					if ($val->type_service_id == $type_service->id) {
+						$val->type_service_short_name = $type_service->short_name;
+						$val->type_service_name = $type_service->name;
+					}
+				}
+			}
 		}
+		$data['type_services'] = $type_services;
 		$data['stantions'] = $stantions;
-		// $data['equipments'] = $this->equipment_model->get_data();
-		// $data['voltage_class'] = $this->voltage_class_model->get_data();
-		// $data['insulation_type'] = $this->insulation_type_model->get_data();
-		// $data['places'] = $this->place_model->get_data();
+
 		// echo "<pre>";
-		// print_r($data);
+		// print_r($stantions);
 		// echo "</pre>";
+
 		$this->load->view('layout', $data);
 	}
 
@@ -101,8 +126,11 @@ class Complete_renovation_objects extends CI_Controller
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('service_date', 'Дата обслуговування об`єкту', 'required|trim');
+		$this->form_validation->set_rules('type_service_id', 'Тип обслуговування', 'required');
+		$this->form_validation->set_rules('act_number', 'Номер акту R3', 'required|trim|min_length[3]|max_length[40]');
 		$this->form_validation->set_rules('service_data', 'Дані з експлуатації по об`єкту', 'required|trim');
 		$this->form_validation->set_rules('executor', 'Виконавець робіт', 'required|trim');
+
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
@@ -246,7 +274,6 @@ class Complete_renovation_objects extends CI_Controller
 		$pdf->Output('operating_list_object.pdf', 'I');
 	}
 
-
 	public function get_value($value = NULL)
 	{
 		if (!$value) {
@@ -266,6 +293,7 @@ class Complete_renovation_objects extends CI_Controller
 		$data['complete_renovation_object_id'] = $post['complete_renovation_object_id'];
 		$data['type_service_id'] = $post['type_service_id'] ? $post['type_service_id'] : 0;
 		$data['service_date'] = date('Y-m-d', strtotime($post['service_date']));
+		$data['act_number'] = $post['act_number'];
 		$data['service_data'] = $post['service_data'];
 		$data['executor'] = $post['executor'];
 		$data['created_by'] = $this->session->user->id;

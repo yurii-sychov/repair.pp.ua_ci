@@ -2,6 +2,18 @@ $(document).ready(function () {
 	$(".datemask").mask("99.99.9999");
 });
 
+function actionCollapse(event) {
+	$(event.currentTarget).toggleClass(
+		"bi-eye-slash text-primary bi-eye text-info"
+	);
+	const tr_current = $(event.currentTarget).closest("tr");
+	const tr_not_current_and_next = $("#collapseParent tbody tr.parent").not(
+		tr_current
+	);
+	tr_current.toggleClass("bg-custom");
+	tr_not_current_and_next.toggle(400);
+}
+
 function openAddOperatingListObjectModal(event) {
 	const subdivision_id = $(event.currentTarget)
 		.closest("tr")
@@ -26,9 +38,6 @@ function openAddOperatingListObjectModal(event) {
 function addOperatingListObject(event) {
 	const form = $("#formAddOperatingListObject");
 	const places = $('[name="places[]"]');
-	console.log(form);
-	console.log(form.serialize());
-	form[0].places = places;
 
 	$.ajax({
 		method: "POST",
@@ -46,12 +55,13 @@ function addOperatingListObject(event) {
 				$("#addOperatingListObjectModal").modal("hide");
 				event.target.disabled = false;
 				$("#formAddOperatingListObject")
-					.find(".row input")
+					.find(".row input, .row select")
 					.removeClass("is-invalid is-valid");
 				form[0].reset();
+				location.reload();
 			}, 1000);
 		} else {
-			$("#formAddOperatingListObject input")
+			$("#formAddOperatingListObject input, #formAddOperatingListObject select")
 				.removeClass("is-invalid")
 				.addClass("is-valid");
 			for (let key in data.errors) {
@@ -63,8 +73,8 @@ function addOperatingListObject(event) {
 						.text(data.errors[key]);
 				}
 			}
-			console.log(data.errors);
-			console.log(form[0].elements.service_date.name);
+			// console.log(data.errors);
+			// console.log(form[0].elements.service_date.name);
 			toastr.error(data.message, "Помилка");
 		}
 	});

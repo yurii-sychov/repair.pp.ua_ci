@@ -7,14 +7,15 @@
  */
 
 defined('BASEPATH') or exit('No direct script access allowed');
+
 if (!function_exists('get_config_pagination')) {
-	function get_config_pagination()
+	function get_config_pagination($link, $total_rows)
 	{
 		$CI = &get_instance();
 
-		$config['base_url'] = '/capital_repairs_transformers/index/';
+		$config['base_url'] = $link;
 		$config['per_page'] = $CI->session->user->rows ? $CI->session->user->rows : 5;
-		$config['total_rows'] = $CI->passport_model->get_total_capital_repairs_of_transformers();
+		$config['total_rows'] = $total_rows;
 
 		$config['page_query_string'] = TRUE;
 		$config['query_string_segment'] = 'page';

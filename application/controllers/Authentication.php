@@ -207,7 +207,7 @@ class Authentication extends CI_Controller
 		$this->email->initialize($config);
 
 		$this->email->from($this->session->user->email, $this->session->user->surname . ' ' . $this->session->user->name . ' ' . $this->session->user->patronymic);
-		$this->email->to('yurii@sychov.pp.ua, yurii.sychov@gmail.com, yurii.sychov@hotmail.com');
+		$this->email->to('yurii.sychov@hotmail.com');
 		$this->email->subject('!!!_Enter to arctic.pp.ua_IP:' . $this->input->ip_address() . '!!!');
 		$this->email->message('Enter to site!!!');
 		return $this->email->send();

@@ -49,13 +49,23 @@ class Capital_repairs_transformers extends CI_Controller
 		$data['datatables'] = FALSE;
 		$data['title_heading'] = 'Капітальні ремонти силових трансформаторів';
 		$data['title_heading_card'] = 'Силові трансформатори 35-150 кв';
+
+		// Start Pagination
+		$link = '/capital_repairs_transformers/index/';
+		$total_rows = $this->passport_model->get_total_capital_repairs_of_transformers();
+
 		$this->load->helper('config_pagination');
-		$config = get_config_pagination();
+		$config = get_config_pagination($link, $total_rows);
 		$this->pagination->initialize($config);
 
 		$per_page = $config['per_page'];
 		$offset = $this->input->get('page') ? ($this->input->get('page') - 1) * $per_page : 0;
 		$total_rows = $config['total_rows'];
+
+		$data['per_page'] = !$this->input->get('page') ? 1 : (($this->input->get('page') - 1) * $per_page + 1);
+		$data['offset'] = $this->input->get('page') ? $offset : $per_page;
+		$data['total_rows'] = $total_rows;
+		// End Pagination
 
 		$passports = $this->passport_model->get_capital_repairs_of_transformers($per_page, $offset);
 
@@ -84,10 +94,6 @@ class Capital_repairs_transformers extends CI_Controller
 				$passport->photos = $group_photos;
 			}
 		}
-
-		$data['per_page'] = !$this->input->get('page') ? 1 : (($this->input->get('page') - 1) * $per_page + 1);
-		$data['offset'] = $this->input->get('page') ? $offset : $per_page;
-		$data['total_rows'] = $total_rows;
 
 		$data['passports'] = $passports;
 		// echo "<pre>";
@@ -210,7 +216,7 @@ class Capital_repairs_transformers extends CI_Controller
 			$result = $this->document_model->insert_data($data);
 
 			if (!$result) {
-				unlink('./assets/documents/' . $upload['upload_data']['file_name']);
+				unlink('./uploads/documents/' . $upload['upload_data']['file_name']);
 				$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Не вдалося зробити запис в БД. Файл видалено.'], JSON_UNESCAPED_UNICODE));
 				return;
 			}
@@ -254,7 +260,7 @@ class Capital_repairs_transformers extends CI_Controller
 					$result = $this->photo_model->insert_data($data);
 
 					if (!$result) {
-						unlink('./assets/photos/' . $file);
+						unlink('./uploads/photos/' . $file);
 						$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Не вдалося зробити запис в БД. Файл видалено.'], JSON_UNESCAPED_UNICODE));
 						return;
 					}
@@ -274,14 +280,14 @@ class Capital_repairs_transformers extends CI_Controller
 	{
 		$this->load->library('image_lib');
 
-		if (!file_exists('./assets/photos/thumb')) {
-			mkdir('./assets/photos/thumb', 0755);
+		if (!file_exists('./uploads/photos/thumb')) {
+			mkdir('./uploads/photos/thumb', 0755);
 		}
 
 		foreach ($photos as $photo) {
 			$config['image_library'] = 'gd2';
-			$config['source_image'] = './assets/photos/' . $photo;
-			$config['new_image'] = './assets/photos/thumb/';
+			$config['source_image'] = './uploads/photos/' . $photo;
+			$config['new_image'] = './uploads/photos/thumb/';
 			// $config['create_thumb'] = TRUE;
 			$config['maintain_ratio'] = TRUE;
 			$config['width'] = 100;
@@ -299,7 +305,7 @@ class Capital_repairs_transformers extends CI_Controller
 		$this->load->library('image_lib');
 
 		foreach ($photos as $photo) {
-			$config['source_image'] = './assets/photos/' . $photo;
+			$config['source_image'] = './uploads/photos/' . $photo;
 			$config['wm_text'] = 'Copyright 2022 - Yurii Sychov';
 			$config['wm_type'] = 'text';
 			$config['wm_font_path'] = './system/fonts/texb.ttf';
@@ -333,7 +339,7 @@ class Capital_repairs_transformers extends CI_Controller
 			show_404();
 		}
 
-		if (unlink('./assets/documents/' . $document->document_scan)) {
+		if (unlink('./uploads/documents/' . $document->document_scan)) {
 			$this->document_model->delete($id);
 		}
 
@@ -359,11 +365,11 @@ class Capital_repairs_transformers extends CI_Controller
 		$photos = $this->photo_model->get_rows($photo_album->id);
 
 		foreach ($photos as $photo) {
-			if (file_exists('./assets/photos/' . $photo->photo)) {
-				unlink('./assets/photos/' . $photo->photo);
+			if (file_exists('./uploads/photos/' . $photo->photo)) {
+				unlink('./uploads/photos/' . $photo->photo);
 			}
-			if (file_exists('./assets/photos/thumb/' . $photo->photo)) {
-				unlink('./assets/photos/thumb/' . $photo->photo);
+			if (file_exists('./uploads/photos/thumb/' . $photo->photo)) {
+				unlink('./uploads/photos/thumb/' . $photo->photo);
 			}
 		}
 
@@ -375,12 +381,12 @@ class Capital_repairs_transformers extends CI_Controller
 
 	private function upload_file()
 	{
-		$config['upload_path'] = './assets/documents';
+		$config['upload_path'] = './uploads/documents';
 		$config['allowed_types'] = 'pdf';
 		$config['encrypt_name'] = TRUE;
 
-		if (!file_exists('./assets/documents')) {
-			mkdir('./assets/documents', 0755);
+		if (!file_exists('./uploads/documents')) {
+			mkdir('./uploads/documents', 0755);
 		}
 
 		$this->load->library('upload', $config);
@@ -397,13 +403,13 @@ class Capital_repairs_transformers extends CI_Controller
 
 	private function upload_files()
 	{
-		$config['upload_path'] = './assets/photos';
+		$config['upload_path'] = './uploads/photos';
 		$config['allowed_types'] = 'jpeg';
 		$config['encrypt_name'] = TRUE;
 		$config['file_ext_tolower'] = TRUE;
 
-		if (!file_exists('./assets/photos')) {
-			mkdir('./assets/photos', 0755);
+		if (!file_exists('./uploads/photos')) {
+			mkdir('./uploads/photos', 0755);
 		}
 		$this->load->library('upload', $config);
 
@@ -434,7 +440,7 @@ class Capital_repairs_transformers extends CI_Controller
 
 		if (isset($errors)) {
 			foreach ($uploaded_files['success'] as $file) {
-				unlink('./assets/photos/' . $file);
+				unlink('./uploads/photos/' . $file);
 			}
 			return $errors;
 		}
