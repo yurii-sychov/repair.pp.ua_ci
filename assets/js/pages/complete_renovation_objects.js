@@ -80,6 +80,10 @@ function addOperatingListObject(event) {
 	});
 }
 
+function editOperatingListObject(event) {
+	console.log($(event.currentTarget));
+}
+
 $("#addOperatingListObjectModal").on("hidden.bs.modal", function (event) {
 	$(event.target).find(".row select, .row input").val("");
 	$(event.target)
