@@ -23,7 +23,7 @@
 		foreach ($results as $item) : ?>
 			<tr nobr="true">
 				<td width="5%" align="center"><?php echo $i; ?></td>
-				<td width="10%" align="center"><?php echo $item->service_date; ?></td>
+				<td width="10%" align="center"><?php echo date('d.m.Y', strtotime($item->service_date)); ?></td>
 				<td width="10%"></td>
 				<td width="15%"><?php echo $item->type_service_short_name ? $item->type_service_short_name : '-'; ?></td>
 				<td width="45%"><?php echo $item->service_data; ?></td>

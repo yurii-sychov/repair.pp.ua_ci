@@ -37,15 +37,15 @@ class Operating_list_object_Model extends CI_Model
 	// 	return $query->result();
 	// }
 
-	// public function get_data_row($id)
-	// {
-	// 	$this->db->select('*');
-	// 	$this->db->where('id', $id);
-	// 	$this->db->from('operating_list');
-	// 	$query = $this->db->get();
+	public function get_data_row($id)
+	{
+		$this->db->select('*');
+		$this->db->where('id', $id);
+		$this->db->from('operating_list_objects');
+		$query = $this->db->get();
 
-	// 	return $query->row();
-	// }
+		return $query->row();
+	}
 
 	public function add_data($data)
 	{
@@ -53,12 +53,12 @@ class Operating_list_object_Model extends CI_Model
 		return $this->db->insert_id();
 	}
 
-	// public function edit_data_row($data, $id)
-	// {
-	// 	$this->db->where('id', $id);
-	// 	$query = $this->db->update('operating_list', $data);
-	// 	return $query;
-	// }
+	public function edit_data_row($data, $id)
+	{
+		$this->db->where('id', $id);
+		$query = $this->db->update('operating_list_objects', $data);
+		return $query;
+	}
 
 	// public function get_all_operating_list()
 	// {

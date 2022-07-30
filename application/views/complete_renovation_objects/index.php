@@ -52,15 +52,15 @@
 							<td><?php echo $item->subdivision; ?></td>
 							<td class="stantion"><?php echo $item->name; ?></td>
 							<td class="text-center"><?php echo $item->count_rows ? $item->count_rows : '-'; ?></td>
-							<td class="text-center"><?php echo $item->create_last_date ? $item->create_last_date : '-'; ?></td>
+							<td class="text-center"><?php echo $item->create_last_date ? date('d.m.Y H:i', strtotime($item->create_last_date)) : '-'; ?></td>
 							<td class="text-center">
-								<a href="javascript:void(0);" class="mx-1" data-bs-toggle="tooltip" title="Додати експлуатаційні дані по об`єкту" onclick="openAddOperatingListObjectModal(event)"><i class="bi bi-journal-plus text-success"></i></a>
-								<a href="/complete_renovation_objects/gen_operating_list_object_pdf/<?php echo $item->id; ?>" class="mx-1" data-bs-toggle="tooltip" title="Згенерувати експлуатаційні дані по об`єкту" target="_blank"><i class="bi bi-file-pdf-fill text-danger"></i></a>
-								<a class="mx-1" data-bs-toggle="collapse" href="#collapse_<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse_<?php echo $i; ?>"><i class="bi bi-eye text-info" data-bs-toggle="tooltip" title="Більше інформації" onCLick="actionCollapse(event);"></i></a>
+								<a href="javascript:void(0);" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Додати експлуатаційні дані по об`єкту" onclick="openAddOperatingListObjectModal(event)"><i class="bi bi-journal-plus text-success"></i></a>
+								<a href="/complete_renovation_objects/gen_operating_list_object_pdf/<?php echo $item->id; ?>" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Згенерувати експлуатаційні дані по об`єкту" target="_blank"><i class="bi bi-file-pdf-fill text-danger"></i></a>
+								<a class="mx-1" data-bs-toggle="collapse" href="#collapse_<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse_<?php echo $i; ?>" onCLick="typeof(actionCollapse) === 'function' ? actionCollapse(event) : '';"><i class="bi bi-eye text-info" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Більше інформації"></i></a>
 							</td>
 						</tr>
 
-						<tr class="collapse collapse-horizontal" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
+						<tr class="collaps collapse-horizontal" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
 							<td colspan="6">
 								<?php if (count($item->operating_data)) : ?>
 									<table class="table table-bordered table-info align-middle">
@@ -96,8 +96,14 @@
 														<input type="text" class="form-control" value="<?php echo $data->executor; ?>" disabled />
 													</td>
 													<td class="text-center">
-														<a href="javascript:void(0);" class="mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" title="Змінити дані"><i class="bi bi-pencil text-success"></i></a>
-														<a href="" class="mx-1" data-bs-toggle="tooltip" title="Подивитись скан акту" target="_blank"><i class="bi bi-image-fill text-danger"></i></a>
+														<a href="javascript:void(0);" class="mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Змінити дані"><i class="bi bi-pencil text-success"></i></a>
+														<?php if ($data->act_scan) : ?>
+															<a href="<?php echo 'uploads/acts/' . $data->act_scan; ?>" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Подивитись скан акту" target="_blank"><i class="bi bi-image-fill text-danger"></i></a>
+														<?php else : ?>
+															<a href="javascript:void(0);" class="mx-1"><i class="bi bi-image-fill text-secondary"></i></a>
+														<?php endif; ?>
+														<a href="javascript:void(0);" class="mx-1" onclick="typeof(reUploadFile) === 'function' ? reUploadFile(event) : '';" data-bs-toggle="tooltip" data-bs-trigger="hover" title="<?php echo $data->act_scan ? 'Замінити файл' : 'Завантажити файл'; ?>"><i class="bi bi-box-arrow-in-down text-warning"></i></a>
+														<input type="file" name="act_scan" class="d-none" />
 													</td>
 												</tr>
 												<?php $y++; ?>

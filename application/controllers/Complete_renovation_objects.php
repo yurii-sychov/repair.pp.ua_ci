@@ -131,7 +131,6 @@ class Complete_renovation_objects extends CI_Controller
 		$this->form_validation->set_rules('service_data', 'Дані з експлуатації по об`єкту', 'required|trim');
 		$this->form_validation->set_rules('executor', 'Виконавець робіт', 'required|trim');
 
-
 		if ($this->form_validation->run() == FALSE) {
 			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
 			return;
@@ -139,10 +138,21 @@ class Complete_renovation_objects extends CI_Controller
 			$operating_list_object_data = $this->set_oparating_list_object_add_data($this->input->post());
 
 			$result = $this->operating_list_object_model->add_data($operating_list_object_data);
+			$id = $this->db->insert_id();
 
 			if ($result) {
 				$log_data = $this->set_log_data("Створення експлуатаційних даних по об`єкту.", 'create', json_encode(NULL, JSON_UNESCAPED_UNICODE), json_encode($operating_list_object_data, JSON_UNESCAPED_UNICODE), 2);
 				$this->log_model->insert_data($log_data);
+			}
+
+			if ($_FILES['act_scan']['error'] == 0) {
+				$upload = $this->upload_file();
+				if (isset($upload['error'])) {
+					$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => $upload['error'], 'error' => TRUE], JSON_UNESCAPED_UNICODE));
+					return;
+				} else {
+					$this->operating_list_object_model->edit_data_row(['act_scan' => $upload['upload_data']['file_name']], $id);
+				}
 			}
 
 			$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Дані додано!', 'result' => $result], JSON_UNESCAPED_UNICODE));
@@ -150,39 +160,39 @@ class Complete_renovation_objects extends CI_Controller
 		}
 	}
 
-	public function edit_operating_list_object()
-	{
-		$this->output->set_content_type('application/json');
+	// public function edit_operating_list_object()
+	// {
+	// 	$this->output->set_content_type('application/json');
 
-		if (!$this->input->post()) {
-			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Відсутні дані POST!'], JSON_UNESCAPED_UNICODE));
-			return;
-		}
+	// 	if (!$this->input->post()) {
+	// 		$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Відсутні дані POST!'], JSON_UNESCAPED_UNICODE));
+	// 		return;
+	// 	}
 
-		$this->load->library('form_validation');
+	// 	$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('service_date', 'Дата обслуговування', 'required|trim');
-		$this->form_validation->set_rules('service_data', 'Дані з експлуатації', 'required|trim');
-		$this->form_validation->set_rules('executor', 'Виконавець', 'required|trim');
+	// 	$this->form_validation->set_rules('service_date', 'Дата обслуговування', 'required|trim');
+	// 	$this->form_validation->set_rules('service_data', 'Дані з експлуатації', 'required|trim');
+	// 	$this->form_validation->set_rules('executor', 'Виконавець', 'required|trim');
 
-		if ($this->form_validation->run() == FALSE) {
-			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
-			return;
-		} else {
-			$operating_list_data_before = $this->operating_list_model->get_data_row($this->input->post('id'));
-			$operating_list_data_after = $this->set_oparating_list_object_edit_data($this->input->post());
+	// 	if ($this->form_validation->run() == FALSE) {
+	// 		$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
+	// 		return;
+	// 	} else {
+	// 		$operating_list_data_before = $this->operating_list_model->get_data_row($this->input->post('id'));
+	// 		$operating_list_data_after = $this->set_oparating_list_object_edit_data($this->input->post());
 
-			$result = $this->operating_list_model->edit_data_row($operating_list_data_after, $this->input->post('id'));
+	// 		$result = $this->operating_list_model->edit_data_row($operating_list_data_after, $this->input->post('id'));
 
-			if ($result) {
-				$log_data = $this->set_log_data("Зміна експлуатаційних даних.", 'update', json_encode($operating_list_data_before, JSON_UNESCAPED_UNICODE), json_encode($operating_list_data_after, JSON_UNESCAPED_UNICODE), 3);
-				$this->log_model->insert_data($log_data);
+	// 		if ($result) {
+	// 			$log_data = $this->set_log_data("Зміна експлуатаційних даних.", 'update', json_encode($operating_list_data_before, JSON_UNESCAPED_UNICODE), json_encode($operating_list_data_after, JSON_UNESCAPED_UNICODE), 3);
+	// 			$this->log_model->insert_data($log_data);
 
-				$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Дані змінено!', 'result' => $result], JSON_UNESCAPED_UNICODE));
-				return;
-			}
-		}
-	}
+	// 			$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Дані змінено!', 'result' => $result], JSON_UNESCAPED_UNICODE));
+	// 			return;
+	// 		}
+	// 	}
+	// }
 
 	public function gen_operating_list_object_pdf($id = NULL)
 	{
@@ -284,6 +294,38 @@ class Complete_renovation_objects extends CI_Controller
 		$this->load->view('value', $data);
 	}
 
+	public function edit_operating_list_object_act_scan()
+	{
+		$this->output->set_content_type('application/json');
+
+		if (!$this->input->post()) {
+			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Відсутні дані POST!'], JSON_UNESCAPED_UNICODE));
+			return;
+		}
+
+		// Видаляємо старий файл
+		$act_scan = $this->operating_list_object_model->get_data_row($this->input->post('id'))->act_scan;
+		if ($act_scan) {
+			if (is_file('./uploads/acts/' . $act_scan)) {
+				unlink('./uploads/acts/' . $act_scan);
+			}
+		}
+
+		// Завантажуємо новий файл
+		if ($_FILES['act_scan']['error'] == 0) {
+			$upload = $this->upload_file();
+			if (isset($upload['error'])) {
+				$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => $upload['error'], 'error' => TRUE], JSON_UNESCAPED_UNICODE));
+				return;
+			} else {
+				$this->operating_list_object_model->edit_data_row(['act_scan' => $upload['upload_data']['file_name']], $this->input->post('id'));
+			}
+		}
+
+		$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Файл завантажено!'], JSON_UNESCAPED_UNICODE));
+		return;
+	}
+
 	private function set_oparating_list_object_add_data($post)
 	{
 
@@ -335,5 +377,27 @@ class Complete_renovation_objects extends CI_Controller
 		$data['created_at'] = date('Y-m-d H:i:s');
 
 		return $data;
+	}
+
+	private function upload_file()
+	{
+		$config['upload_path'] = './uploads/acts';
+		$config['allowed_types'] = 'pdf';
+		$config['encrypt_name'] = TRUE;
+
+		if (!file_exists('./uploads/acts')) {
+			mkdir('./uploads/acts', 0755);
+		}
+
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+
+		if (!$this->upload->do_upload('act_scan')) {
+			$error = array('error' => $this->upload->display_errors('', ''));
+			return $error;
+		} else {
+			$data = array('upload_data' => $this->upload->data());
+			return $data;
+		}
 	}
 }

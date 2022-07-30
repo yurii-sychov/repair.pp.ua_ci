@@ -50,7 +50,7 @@
 	<div class="row">
 		<div class="col-md-12 mb-3">
 			<label for="idActScanAdd" class="form-label">Сканкопія акту в форматі PDF</label>
-			<input type="file" name="act_scan" class="form-control" id="idActScanAdd" accept=".pdf" disabled>
+			<input type="file" name="act_scan" class="form-control" id="idActScanAdd" accept=".pdf">
 			<div class="invalid-feedback"></div>
 		</div>
 	</div>
