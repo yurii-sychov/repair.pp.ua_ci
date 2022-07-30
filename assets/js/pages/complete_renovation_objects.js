@@ -11,7 +11,7 @@ function actionCollapse(event) {
 		tr_current
 	);
 	tr_current.toggleClass("bg-custom");
-	tr_not_current_and_next.toggle(400);
+	tr_not_current_and_next.toggle();
 }
 
 function openAddOperatingListObjectModal(event) {
@@ -81,7 +81,24 @@ function addOperatingListObject(event) {
 }
 
 function editOperatingListObject(event) {
-	console.log($(event.currentTarget));
+	$(event.currentTarget)
+		.find("i")
+		.toggleClass("bi-check2 text-danger bi-pencil text-success");
+	if (
+		$(event.currentTarget).closest("tr").find("input, select").attr("disabled")
+	) {
+		$(event.currentTarget)
+			.closest("tr")
+			.find("input, select")
+			.removeAttr("disabled");
+	} else {
+		$(event.currentTarget)
+			.closest("tr")
+			.find("input, select")
+			.attr("disabled", "deabled");
+	}
+
+	console.log($(event.currentTarget).closest("tr"));
 }
 
 $("#addOperatingListObjectModal").on("hidden.bs.modal", function (event) {

@@ -78,18 +78,6 @@
 										<tbody>
 											<?php $y = 1; ?>
 											<?php foreach ($item->operating_data as $data) : ?>
-												<tr class="d-none">
-													<td class="text-center"><?php echo $y; ?></td>
-													<td class="text-center"><?php echo date('d.m.Y', strtotime($data->service_date)); ?></td>
-													<td class="text-center"><?php echo $data->act_number; ?></td>
-													<td class="text-center"><?php echo $data->type_service_short_name; ?></td>
-													<td><?php echo $data->service_data; ?></td>
-													<td><?php echo $data->executor; ?></td>
-													<td class="text-center">
-														<!-- <a href="javascript:void(0);" class="mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" title="Змінити дані"><i class="bi bi-toggle-off" style="font-size: 24px"></i></a> -->
-														<a href="" class="mx-1" data-bs-toggle="tooltip" title="Подивитись скан акту" target="_blank"><i class="bi bi-image-fill text-danger"></i></a>
-													</td>
-												</tr>
 												<tr class="form" data-id="<?php echo $data->id; ?>">
 													<td class="text-center"><?php echo $y; ?></td>
 													<td class="text-center" onclick="editOperatingListObject(event);">
@@ -108,7 +96,7 @@
 														<input type="text" class="form-control" value="<?php echo $data->executor; ?>" disabled />
 													</td>
 													<td class="text-center">
-														<!-- <a href="javascript:void(0);" class="mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" title="Змінити дані"><i class="bi bi-toggle-off" style="font-size: 24px"></i></a> -->
+														<a href="javascript:void(0);" class="mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" title="Змінити дані"><i class="bi bi-pencil text-success"></i></a>
 														<a href="" class="mx-1" data-bs-toggle="tooltip" title="Подивитись скан акту" target="_blank"><i class="bi bi-image-fill text-danger"></i></a>
 													</td>
 												</tr>
