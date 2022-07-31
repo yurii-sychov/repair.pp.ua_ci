@@ -3,7 +3,6 @@
 		<div class="card-header mb-2">
 			<h5><?php echo $title_heading_card; ?></h5>
 		</div>
-
 		<?php if ($count_subdivisions > 1) : ?>
 			<form action="/complete_renovation_objects/index" method="GET">
 				<div class="row justify-content-start mb-2">
