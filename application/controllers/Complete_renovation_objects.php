@@ -108,7 +108,7 @@ class Complete_renovation_objects extends CI_Controller
 		$data['stantions'] = $stantions;
 
 		// echo "<pre>";
-		// print_r($stantions);
+		// print_r($data['stantions']);
 		// echo "</pre>";
 
 		$this->load->view('layout', $data);
@@ -128,8 +128,8 @@ class Complete_renovation_objects extends CI_Controller
 		$this->form_validation->set_rules('service_date', 'Дата обслуговування об`єкту', 'required|trim');
 		$this->form_validation->set_rules('type_service_id', 'Тип обслуговування', 'required');
 		$this->form_validation->set_rules('act_number', 'Номер акту R3', 'required|trim|min_length[3]|max_length[40]');
-		$this->form_validation->set_rules('service_data', 'Дані з експлуатації по об`єкту', 'required|trim');
-		$this->form_validation->set_rules('executor', 'Виконавець робіт', 'required|trim');
+		$this->form_validation->set_rules('service_data', 'Дані з експлуатації по об`єкту', 'required|trim|min_length[3]|max_length[255]');
+		$this->form_validation->set_rules('executor', 'Виконавець робіт', 'required|trim|min_length[3]|max_length[50]');
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
@@ -160,39 +160,46 @@ class Complete_renovation_objects extends CI_Controller
 		}
 	}
 
-	// public function edit_operating_list_object()
-	// {
-	// 	$this->output->set_content_type('application/json');
+	public function edit_operating_list_object()
+	{
+		$this->output->set_content_type('application/json');
 
-	// 	if (!$this->input->post()) {
-	// 		$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Відсутні дані POST!'], JSON_UNESCAPED_UNICODE));
-	// 		return;
-	// 	}
+		if (!$this->input->post()) {
+			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Відсутні дані POST!'], JSON_UNESCAPED_UNICODE));
+			return;
+		}
 
-	// 	$this->load->library('form_validation');
+		if (!$this->input->post('is_edit')) {
+			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Необхідно активувати форму!'], JSON_UNESCAPED_UNICODE));
+			return;
+		}
 
-	// 	$this->form_validation->set_rules('service_date', 'Дата обслуговування', 'required|trim');
-	// 	$this->form_validation->set_rules('service_data', 'Дані з експлуатації', 'required|trim');
-	// 	$this->form_validation->set_rules('executor', 'Виконавець', 'required|trim');
+		$this->load->library('form_validation');
 
-	// 	if ($this->form_validation->run() == FALSE) {
-	// 		$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
-	// 		return;
-	// 	} else {
-	// 		$operating_list_data_before = $this->operating_list_model->get_data_row($this->input->post('id'));
-	// 		$operating_list_data_after = $this->set_oparating_list_object_edit_data($this->input->post());
+		$this->form_validation->set_rules('service_date', 'Дата обслуговування об`єкту', 'required|trim');
+		$this->form_validation->set_rules('type_service_id', 'Тип обслуговування', 'required');
+		$this->form_validation->set_rules('act_number', 'Номер акту R3', 'required|trim|min_length[3]|max_length[40]');
+		$this->form_validation->set_rules('service_data', 'Дані з експлуатації по об`єкту', 'required|trim|min_length[3]|max_length[255]');
+		$this->form_validation->set_rules('executor', 'Виконавець робіт', 'required|trim|min_length[3]|max_length[50]');
 
-	// 		$result = $this->operating_list_model->edit_data_row($operating_list_data_after, $this->input->post('id'));
+		if ($this->form_validation->run() == FALSE) {
+			$this->output->set_output(json_encode(['status' => 'ERROR', 'message' => 'Щось пішло не так!', 'errors' => $this->form_validation->error_array()], JSON_UNESCAPED_UNICODE));
+			return;
+		} else {
+			$operating_list_data_before = $this->operating_list_object_model->get_data_row($this->input->post('id'));
+			$operating_list_data_after = $this->set_oparating_list_object_edit_data($this->input->post());
 
-	// 		if ($result) {
-	// 			$log_data = $this->set_log_data("Зміна експлуатаційних даних.", 'update', json_encode($operating_list_data_before, JSON_UNESCAPED_UNICODE), json_encode($operating_list_data_after, JSON_UNESCAPED_UNICODE), 3);
-	// 			$this->log_model->insert_data($log_data);
+			$result = $this->operating_list_object_model->edit_data_row($operating_list_data_after, $this->input->post('id'));
 
-	// 			$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Дані змінено!', 'result' => $result], JSON_UNESCAPED_UNICODE));
-	// 			return;
-	// 		}
-	// 	}
-	// }
+			if ($result) {
+				$log_data = $this->set_log_data("Зміна експлуатаційних даних по об`єкту.", 'update', json_encode($operating_list_data_before, JSON_UNESCAPED_UNICODE), json_encode($operating_list_data_after, JSON_UNESCAPED_UNICODE), 3);
+				$this->log_model->insert_data($log_data);
+
+				$this->output->set_output(json_encode(['status' => 'SUCCESS', 'message' => 'Дані змінено!', 'result' => $result], JSON_UNESCAPED_UNICODE));
+				return;
+			}
+		}
+	}
 
 	public function gen_operating_list_object_pdf($id = NULL)
 	{
@@ -350,7 +357,9 @@ class Complete_renovation_objects extends CI_Controller
 	{
 		$data = [];
 
+		$data['type_service_id'] = $post['type_service_id'];
 		$data['service_date'] = date('Y-m-d', strtotime($post['service_date']));
+		$data['act_number'] = $post['act_number'];
 		$data['service_data'] = $post['service_data'];
 		$data['executor'] = $post['executor'];
 		$data['updated_by'] = $this->session->user->id;

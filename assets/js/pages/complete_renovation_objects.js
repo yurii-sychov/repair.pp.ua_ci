@@ -82,9 +82,6 @@ function addOperatingListObject(event) {
 }
 
 function editOperatingListObject(event) {
-	$(event.currentTarget)
-		.find("i")
-		.toggleClass("bi-check2 text-danger bi-pencil text-success");
 	if (
 		$(event.currentTarget).closest("tr").find("input, select").attr("disabled")
 	) {
@@ -92,19 +89,101 @@ function editOperatingListObject(event) {
 			.closest("tr")
 			.find("input, select")
 			.removeAttr("disabled");
+		$(event.currentTarget).closest("tr").find('[name="is_edit"]').val(1);
 	} else {
 		$(event.currentTarget)
 			.closest("tr")
 			.find("input, select")
 			.attr("disabled", "deabled");
+		$(event.currentTarget).closest("tr").find('[name="is_edit"]').val(0);
 	}
+}
+
+function editOperatingListObjectHandler(event) {
+	let form = $(event.currentTarget).closest("tr").find("input, select");
+	let is_edit = $(event.currentTarget)
+		.closest("tr")
+		.find('[name="is_edit"]')
+		.val();
+	let id = $(event.currentTarget).closest("tr").data("id");
+	let service_date = $(event.currentTarget)
+		.closest("tr")
+		.find('[name="service_date"]')
+		.val();
+	let act_number = $(event.currentTarget)
+		.closest("tr")
+		.find('[name="act_number"]')
+		.val();
+	let type_service_id = $(event.currentTarget)
+		.closest("tr")
+		.find('[name="type_service_id"]')
+		.val();
+	let service_data = $(event.currentTarget)
+		.closest("tr")
+		.find('[name="service_data"]')
+		.val();
+	let executor = $(event.currentTarget)
+		.closest("tr")
+		.find('[name="executor"]')
+		.val();
+	$.ajax({
+		method: "POST",
+		url: "/complete_renovation_objects/edit_operating_list_object",
+		data: {
+			is_edit,
+			id,
+			service_date,
+			act_number,
+			type_service_id,
+			service_data,
+			executor,
+		},
+	}).done(function (data) {
+		if (data.status === "SUCCESS") {
+			form
+				.attr("disabled", "disabled")
+				.removeClass("is-invalid")
+				.addClass("is-valid");
+			$(event.target).closest("tr").find('[name="is_edit"]').val(0);
+			toastr.success(data.message, "Успіх");
+			setTimeout(() => {
+				form.removeClass("is-valid");
+				// location.reload();
+			}, 1000);
+		} else {
+			for (let i = 0; i < form.length; i++) {
+				$(event.target)
+					.closest("tr")
+					.find('[name="' + form[i].name + '"]')
+					.removeClass("is-valid is-invalid");
+				for (let key in data.errors) {
+					if (key === form[i].name) {
+						$(event.target)
+							.closest("tr")
+							.find('[name="' + key + '"]')
+							.addClass("is-invalid");
+					} else {
+						$(event.target)
+							.closest("tr")
+							.find('[name="' + form[i].name + '"]')
+							.addClass("is-valid");
+					}
+				}
+			}
+			toastr.error(data.message, "Помилка");
+		}
+	});
 }
 
 function reUploadFile(event) {
 	const id = $(event.currentTarget).closest("tr").data("id");
-	const input = $(event.currentTarget).next();
+	const input = $(event.currentTarget).closest("tr").find('[name="act_scan"]');
 	input.off();
 	input.click();
+	let agree = confirm("Ви впевнені?");
+	if (agree == false) {
+		return;
+	}
 	input.change((e) => {
 		const file = e.target.files[0];
 		const formData = new FormData();

@@ -54,7 +54,8 @@
 							<td class="text-center"><?php echo $item->create_last_date ? date('d.m.Y H:i', strtotime($item->create_last_date)) : '-'; ?></td>
 							<td class="text-center">
 								<a href="javascript:void(0);" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Додати експлуатаційні дані по об`єкту" onclick="openAddOperatingListObjectModal(event)"><i class="bi bi-journal-plus text-success"></i></a>
-								<a href="/complete_renovation_objects/gen_operating_list_object_pdf/<?php echo $item->id; ?>" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Згенерувати експлуатаційні дані по об`єкту" target="_blank"><i class="bi bi-file-pdf-fill text-danger"></i></a>
+								<a href="/complete_renovation_objects/gen_operating_list_object_pdf/<?php echo $item->id; ?>" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Згенерувати експлуатаційні дані по об`єкту PDF" target="_blank"><i class="bi bi-file-pdf-fill text-danger"></i></a>
+								<a href="/complete_renovation_objects/gen_operating_list_object_excel/<?php echo $item->id; ?>" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Згенерувати експлуатаційні дані по об`єкту EXCEL" target="_blank"><i class="bi bi-file-excel-fill text-success"></i></a>
 								<a class="mx-1" data-bs-toggle="collapse" href="#collapse_<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse_<?php echo $i; ?>" onCLick="typeof(actionCollapse) === 'function' ? actionCollapse(event) : '';"><i class="bi bi-eye text-info" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Більше інформації"></i></a>
 							</td>
 						</tr>
@@ -78,30 +79,36 @@
 											<?php $y = 1; ?>
 											<?php foreach ($item->operating_data as $data) : ?>
 												<tr class="form" data-id="<?php echo $data->id; ?>">
-													<td class="text-center"><?php echo $y; ?></td>
+													<td class="text-center" onclick="editOperatingListObject(event);"><?php echo $y; ?></td>
 													<td class="text-center">
-														<input type="text" class="form-control" value="<?php echo date('d.m.Y', strtotime($data->service_date)); ?>" disabled />
+														<input type="text" class="form-control service_date datemask datepicker" name="service_date" value="<?php echo date('d.m.Y', strtotime($data->service_date)); ?>" maxlength="10" disabled />
 													</td>
 													<td class="text-center">
-														<input type="text" class="form-control" value="<?php echo $data->act_number; ?>" disabled />
+														<input type="text" class="form-control act_number" name="act_number" value="<?php echo $data->act_number; ?>" maxlength="20" disabled />
 													</td>
 													<td class="text-center">
-														<input type="text" class="form-control" value="<?php echo $data->type_service_short_name; ?>" disabled />
+														<select name="type_service_id" class="form-select type_service_short_name" disabled>
+															<option value="">Оберіть вид обслуговування</option>
+															<?php foreach ($type_services as $type_service) : ?>
+																<option value="<?php echo $type_service->id; ?>" <?php echo $type_service->id == $data->type_service_id ? 'selected' : NULL; ?>><?php echo $type_service->short_name; ?></option>
+															<?php endforeach; ?>
+														</select>
 													</td>
 													<td>
-														<input type="text" class="form-control" value="<?php echo $data->service_data; ?>" disabled />
+														<input type="text" class="form-control service_data" name="service_data" value="<?php echo htmlspecialchars($data->service_data); ?>" maxlength="255" disabled />
 													</td>
 													<td>
-														<input type="text" class="form-control" value="<?php echo $data->executor; ?>" disabled />
+														<input type="text" class="form-control executor" name="executor" value="<?php echo $data->executor; ?>" maxlength="50" disabled />
 													</td>
 													<td class="text-center">
-														<!-- <a href="javascript:void(0);" class="edit mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Змінити дані"><i class="bi bi-pencil text-success"></i></a> -->
+														<a href="javascript:void(0);" class="edit mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Змінити дані" onclick="editOperatingListObjectHandler(event);"><i class="bi bi-pencil text-success"></i></a>
 														<?php if ($data->act_scan) : ?>
 															<a href="<?php echo 'uploads/acts/' . $data->act_scan; ?>" class="view-act-scan mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Подивитись скан акту" target="_blank"><i class="bi bi-image-fill text-danger"></i></a>
 														<?php else : ?>
 															<a href="javascript:void(0);" class="upload-file mx-1"><i class="bi bi-image-fill text-secondary"></i></a>
 														<?php endif; ?>
 														<a href="javascript:void(0);" class="upload-file mx-1" onclick="typeof(reUploadFile) === 'function' ? reUploadFile(event) : '';" data-bs-toggle="tooltip" data-bs-trigger="hover" title="<?php echo $data->act_scan ? 'Замінити скан акту' : 'Завантажити скан акту'; ?>"><i class="bi bi-box-arrow-in-down text-warning"></i></a>
+														<input type="text" name="is_edit" class="d-none" />
 														<input type="file" name="act_scan" class="d-none" />
 													</td>
 												</tr>
