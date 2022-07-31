@@ -98,8 +98,6 @@ function editOperatingListObject(event) {
 			.find("input, select")
 			.attr("disabled", "deabled");
 	}
-
-	console.log($(event.currentTarget).closest("tr"));
 }
 
 function reUploadFile(event) {

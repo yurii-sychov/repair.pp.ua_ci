@@ -59,7 +59,7 @@
 							</td>
 						</tr>
 
-						<tr class="collaps collapse-horizontal" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
+						<tr class="collapse collapse-horizontal" id="collapse_<?php echo $i; ?>" data-bs-parent="#collapseParent">
 							<td colspan="6">
 								<?php if (count($item->operating_data)) : ?>
 									<table class="table table-bordered table-info align-middle">
@@ -79,29 +79,29 @@
 											<?php foreach ($item->operating_data as $data) : ?>
 												<tr class="form" data-id="<?php echo $data->id; ?>">
 													<td class="text-center"><?php echo $y; ?></td>
-													<td class="text-center" onclick="editOperatingListObject(event);">
+													<td class="text-center">
 														<input type="text" class="form-control" value="<?php echo date('d.m.Y', strtotime($data->service_date)); ?>" disabled />
 													</td>
-													<td class="text-center" onclick="editOperatingListObject(event);">
+													<td class="text-center">
 														<input type="text" class="form-control" value="<?php echo $data->act_number; ?>" disabled />
 													</td>
-													<td class="text-center" onclick="editOperatingListObject(event);">
+													<td class="text-center">
 														<input type="text" class="form-control" value="<?php echo $data->type_service_short_name; ?>" disabled />
 													</td>
-													<td onclick="editOperatingListObject(event);">
+													<td>
 														<input type="text" class="form-control" value="<?php echo $data->service_data; ?>" disabled />
 													</td>
-													<td onclick="editOperatingListObject(event);">
+													<td>
 														<input type="text" class="form-control" value="<?php echo $data->executor; ?>" disabled />
 													</td>
 													<td class="text-center">
-														<a href="javascript:void(0);" class="mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Змінити дані"><i class="bi bi-pencil text-success"></i></a>
+														<!-- <a href="javascript:void(0);" class="edit mx-1" onclick="editOperatingListObject(event);" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Змінити дані"><i class="bi bi-pencil text-success"></i></a> -->
 														<?php if ($data->act_scan) : ?>
-															<a href="<?php echo 'uploads/acts/' . $data->act_scan; ?>" class="mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Подивитись скан акту" target="_blank"><i class="bi bi-image-fill text-danger"></i></a>
+															<a href="<?php echo 'uploads/acts/' . $data->act_scan; ?>" class="view-act-scan mx-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Подивитись скан акту" target="_blank"><i class="bi bi-image-fill text-danger"></i></a>
 														<?php else : ?>
-															<a href="javascript:void(0);" class="mx-1"><i class="bi bi-image-fill text-secondary"></i></a>
+															<a href="javascript:void(0);" class="upload-file mx-1"><i class="bi bi-image-fill text-secondary"></i></a>
 														<?php endif; ?>
-														<a href="javascript:void(0);" class="mx-1" onclick="typeof(reUploadFile) === 'function' ? reUploadFile(event) : '';" data-bs-toggle="tooltip" data-bs-trigger="hover" title="<?php echo $data->act_scan ? 'Замінити файл' : 'Завантажити файл'; ?>"><i class="bi bi-box-arrow-in-down text-warning"></i></a>
+														<a href="javascript:void(0);" class="upload-file mx-1" onclick="typeof(reUploadFile) === 'function' ? reUploadFile(event) : '';" data-bs-toggle="tooltip" data-bs-trigger="hover" title="<?php echo $data->act_scan ? 'Замінити скан акту' : 'Завантажити скан акту'; ?>"><i class="bi bi-box-arrow-in-down text-warning"></i></a>
 														<input type="file" name="act_scan" class="d-none" />
 													</td>
 												</tr>
